@@ -1,0 +1,6 @@
+[book]
+authors = ["DoctorManhattan123", "uhasker"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Introduction to Linux"
