@@ -6,6 +6,7 @@ To get a preview of the book you need to install the [mdBook CLI](https://rust-l
 
 ```shell
 cargo install mdbook
+cargo install mdbook-katex
 ```
 
 Start a development server, which will serve the book on http://&lt;your-ip-address&gt;:3000 (e.g. http://localhost:3000).

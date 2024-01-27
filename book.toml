@@ -4,3 +4,6 @@ language = "en"
 multilingual = false
 src = "src"
 title = "Introduction to Linux"
+
+[preprocessor.katex]
+after = ["links"]
