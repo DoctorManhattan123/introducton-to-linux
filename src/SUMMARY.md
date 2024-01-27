@@ -5,6 +5,8 @@
 [Acknowledgments](acknowledgments.md)
 
 - [Number Systems and Character Encodings](chapter1/README.md)
+  - [The Binary And Hexadecimal System](chapter1/01-binary-system.md)
+  - [Unicode](chapter1/02-unicode.md)
 
 - [File System](chapter2/README.md)
 
