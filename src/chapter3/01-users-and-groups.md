@@ -35,24 +35,25 @@ power wheel input storage video username
 
 The exact groups will of course depend on your current setup, but lets explain some of them:
 
-* power - this group related to the power management priviliges of the system, which more or less
-gives you the permission to shutdown, reboot and do other power related thing with your device. On the
-first sight this seems kind of useless, as every user _should_ have the permission to poweroff the system.
-But imagine you are on some critical hardware, which should never shutdown. In this case you would just
-remove the `power` group from the user, and he will not be able to shutdown the system, _except of course
-by banging throwing the laptop at the wall_
-* wheel - This group is a special user group to control access to the `su` and `sudo` command, which allows
-you to pretend to be another user, usually the superuser/root user. If you are on a Debian-like system, this
-group will probably be called `sudo`. With the sudo command you can pretend to be the root and execute
-commands with root permission. _And yes, with this, you will be able to delete the `/boot` directory_. 
-**Please DO NOT do this, for your own sake**.
+- power - this group related to the power management priviliges of the system, which more or less
+  gives you the permission to shutdown, reboot and do other power related thing with your device. On the
+  first sight this seems kind of useless, as every user _should_ have the permission to poweroff the system.
+  But imagine you are on some critical hardware, which should never shutdown. In this case you would just
+  remove the `power` group from the user, and he will not be able to shutdown the system, _except of course
+  by banging throwing the laptop at the wall_
+- wheel - This group is a special user group to control access to the `su` and `sudo` command, which allows
+  you to pretend to be another user, usually the superuser/root user. If you are on a Debian-like system, this
+  group will probably be called `sudo`. With the sudo command you can pretend to be the root and execute
+  commands with root permission. _And yes, with this, you will be able to delete the `/boot` directory_.
+  **Please DO NOT do this, for your own sake**.
 
 > To execute a command via root user, you just prepend the command you want to execute with `sudo`. For example:
+
 ```sh
 sudo ls -la
 ```
+
 You will most likely be asked to input your password, as not everyone should be able to execute commands
 with root privilige.
 
-* input - gives you access to input devices like keyboard, mice and other human interfaces
-
+- input - gives you access to input devices like keyboard, mice and other human interfaces
