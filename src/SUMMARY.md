@@ -18,7 +18,7 @@
 
 - [Users and Groups](chapter3/README.md)
 
-  - [User and Groups](chapter3/01-users-and-groups.md)
+  - [Users and Groups](chapter3/01-users-and-groups.md)
   - [File Permissions and Ownership](chapter3/02-file-permissions-and-ownership.md)
   - [Password Management](chapter3/03-password-management.md)
 
