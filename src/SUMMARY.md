@@ -10,6 +10,10 @@
   - [Unicode](chapter1/02-unicode.md)
 
 - [File System](chapter2/README.md)
+  - [Basic File Commands](chapter2/01-basic-file-commands.md)
+  - [Symbolic Links](chapter2/02-symbolic-links.md)
+  - [Binary Files and Hexdumps](chapter2/03-binary-files-and-hexdumps.md)
+  - [Filesystem Hierarchy Standard](chapter2/04-filesystem-hierarchy-standard.md)
 
 - [Users and Groups](chapter3/README.md)
 
