@@ -14,13 +14,13 @@ To open the terminal on Ubuntu, press `Ctrl` + `Alt` + `T`.
 
 The `ls` command is used to view the contents of a directory (like folders and files).
 When you open the Terminal, you're usually in your home directory. To see what's inside, type `ls` and press Enter.
-To see more details about each file, type `ls -l` and press Enter. This command lists files with details like 
+To see more details about each file, type `ls -l` and press Enter. This command lists files with details like
 permissions, owner, size, and modification date.
 To include hidden files (files that start with a dot) in your listing, type `ls -a`.
 
 > In Linux and Unix-like operating systems, hidden files are those that begin with a dot (.) in their filename.
-These files are usually not displayed by default when using file managers or the ls command,
-as they are often used for storing user preferences or system configuration settings.
+> These files are usually not displayed by default when using file managers or the ls command,
+> as they are often used for storing user preferences or system configuration settings.
 
 2. **`cd` Command (Change Directory)**:
 
@@ -32,7 +32,7 @@ To return to your home directory from anywhere, just type `cd` and press Enter.
 3. **`pwd` Command (Print Working Directory)**:
 
 The `pwd` command shows your current directory's path.
-If you're not sure where you are in the filesystem, type `pwd` and press Enter. 
+If you're not sure where you are in the filesystem, type `pwd` and press Enter.
 It will display the full path of your current directory.
 
 4. **mkdir Command (Make Directory)**:
@@ -54,7 +54,7 @@ To move a file to a different directory, type `mv filename.txt /path/to/director
 7. **`cp` Command (Copy Files/Directories)**:
 
 The `cp` command is used to copy files and directories.
-To copy a file, type `cp file.txt destination/` and press Enter 
+To copy a file, type `cp file.txt destination/` and press Enter
 (where destination/ is the directory where you want to copy the file).
 To copy a directory and its contents, use the -r flag: `cp -r directory/ destination/`.
 
@@ -68,7 +68,7 @@ Be cautious with this command, as it permanently deletes files and directories.
 9. **find Command (Search for Files/Directories)**:
 
 The find command is used to search for files and directories based on different criteria.
-To find a file by name, type find ``/path/to/search/ -name "filename.txt"`` and press Enter.
+To find a file by name, type find `/path/to/search/ -name "filename.txt"` and press Enter.
 You can also search based on file type, size, modification date, and more.
 
 10. **`grep` Command (Search Within Files)**:
@@ -89,7 +89,7 @@ after doing a command.
 
 1. Open the Terminal on your Ubuntu system.
 2. View the contents of your current directory and then view the detailed information about each item
-in this directory.
+   in this directory.
 3. Navigate to the "Documents" directory from your current location.
 4. Check which directory you are currently in.
 5. Create a new directory called "PracticeFolder" inside "Documents."
@@ -109,3 +109,34 @@ in this directory.
 19. Delete "example-renamed.txt."
 20. Navigate back to "PracticeFolder" and delete "SubFolder."
 21. Finally, navigate back to "Documents" and delete "PracticeFolder."
+
+## Utility commands
+
+In this chapter we will introduce a few more commands that make it easy to write to files via
+the command line.
+
+1. `echo <something>` just prints the thing after the `echo` to the console
+
+```sh
+> echo "Hello, world!" # print "Hello, world!"
+Hello, world!
+```
+
+2. `cat <filename>` will output the content of the file with the given name to the console.
+   Assuming we have a file called `example.txt` with the content `Hello, I am an example.`
+
+```sh
+> cat example.txt
+Hello, I am an example.
+```
+
+2. `>` This is technically not a command, but this operator allows you to write the content
+   left of `>` into the file specified right of the `>`. For example, if we would like to create a file
+   named `example.txt` and put the content `Hello, world!` into it, we would execute the following.
+
+```sh
+> touch example.txt
+> echo "Hello, world!" > example.txt
+> cat example.txt # To test if the content is actually in the file
+Hello, world!
+```
