@@ -18,8 +18,8 @@
 
 - [Users and Groups](chapter3/README.md)
 
-  - [Users and Groups](chapter3/01-users-and-groups.md)
-  - [File Permissions and Ownership](chapter3/02-file-permissions-and-ownership.md)
+  - [File Permissions and Ownership](chapter3/01-file-permissions-and-ownership.md)
+  - [Users and Groups](chapter3/02-users-and-groups.md)
   - [Password Management](chapter3/03-password-management.md)
 
 - [Processes](chapter4/README.md)

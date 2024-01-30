@@ -156,4 +156,3 @@ $ sudo groupdel renamedgroup # groupdel <group-name-to-delete> # delete existing
 
 There are a lot of specific groups, we covered a few of them above, but you can find a more complete
 list [here](https://wiki.archlinux.org/title/users_and_groups#Group_list)
-

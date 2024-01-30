@@ -25,16 +25,16 @@ Now lets do the following:
 
 1. Create a new user
 2. Change the password of the user to a password of your liking
-2. Login as this user
-3. Logout
-4. Disable password login to this user
-5. Try log in as the user
-6. Unlock the account
-7. Login into the account
-8. Logout
-9. remove the user and the group
+3. Login as this user
+4. Logout
+5. Disable password login to this user
+6. Try log in as the user
+7. Unlock the account
+8. Login into the account
+9. Logout
+10. remove the user and the group
 
-_I will show you all of the commands below, but first try it our yourself_
+_I will show you all of the commands below, but first try it out yourself_
 
 ```sh
 $ sudo useradd exampleuser # add the user
@@ -48,5 +48,3 @@ $ su - exampleuser # login as the example user
 $ exit # logout
 $ sudo userdel -r exampleuser # delete the user
 ```
-
-
