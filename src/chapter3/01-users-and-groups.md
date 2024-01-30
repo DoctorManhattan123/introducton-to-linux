@@ -1,4 +1,4 @@
-# Users and Groups
+# Permissions 
 
 We will first define users and groups and explain them after file permissions.
 
@@ -222,6 +222,14 @@ $ ls /home/
 alex/  exampleuser/
 ```
 
+To login as the new user, you can use the `su` command:
+
+```sh
+su - renameduser
+```
+
+To logout, you can just use the `exit` command.
+
 You can also delete a user (the `-r` option specifies that the home directory and mail spool of the user
 should also be deleted):
 
@@ -312,3 +320,4 @@ $ sudo groupdel renamedgroup # groupdel <group-name-to-delete> # delete existing
 
 There are a lot of specific groups, we covered a few of them above, but you can find a more complete
 list [here](https://wiki.archlinux.org/title/users_and_groups#Group_list)
+

@@ -26,6 +26,6 @@
 
 - [Network Fundamentals](chapter5/README.md)
 
-- [Package Management](chapter5/README.md)
+- [Package Management](chapter6/README.md)
 
-- [Basic Shell Scripting](chapter6/README.md)
+- [Basic Shell Scripting](chapter7/README.md)
