@@ -115,3 +115,83 @@ add() {
 
 add 5 10  # Calls the function with 5 and 10 as arguments
 ```
+
+## Redirection
+
+Programs usually send results to **stdout** and errors to **stderr** and take input from **stdin**.
+They are internaly referenced as 0 (stdin), 1 (stdout), 2 (stderr).
+
+You can use I/O redirection to redirect where stdout goes with `>` or `>>`.
+To redirect stderr we use `2>`.
+
+We can redirect stdout and stderr to a file using `> filename 2>&1` (i.e. redirect stdout to file and stderr to stdout).
+Alternatively you can use `&>` for combined redirection.
+
+Use `<` to redirect stdin.
+
+We can create the worlds simplest text editor with `cat > output`.
+
+## Pipe Operator
+
+The pipe operator `|` can be used to pipe stdout of one command to stdin of another command.
+
+## Interesting Commands
+
+There are basically four types of commands:
+
+- executable programs (compiled binaries or scripts)
+- shell builtins
+- shell functions
+- aliases
+
+Use `type` to display a command type:
+
+```console
+$ type cd
+cd is a shell builtin
+$ type ls
+ls is aliased to `ls --color=auto'
+$ type mv
+mv is /usr/bin/mv
+```
+
+Use `which` to get the locatino of an executable:
+
+```console
+$ which mv
+/usr/bin/mv
+```
+
+Use `help` to get help for shell builtins:
+
+```sh
+help cd
+```
+
+For most commands you can try `--help`:
+
+```sh
+mv --help
+```
+
+Use `whatis` for a one-line description:
+
+```sh
+whatis mv
+```
+
+You can also try to view the **man page** (manual page):
+
+```sh
+man mv
+```
+
+You can search the man pages with `apropos`:
+
+```sh
+apropos "remove file"
+```
+
+## Aliases
+
+You can create aliases with the `alias` command and `unalias` to remove an alias.
