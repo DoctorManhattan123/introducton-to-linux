@@ -24,6 +24,8 @@ username="John"
 echo $username
 ```
 
+## Environment Variables
+
 Environment variables are special variables that are defined outside your script.
 They are part of the environment in which the script runs.
 These variables contain information related to the system or user environment.
@@ -34,6 +36,43 @@ For example `USER` contains the current user and `HOME` the home directory of th
 echo $USER
 echo $HOME
 ```
+
+Use `printenv` to print environment variables.
+
+There are login shell session and non-login shell sessions.
+
+Important files for login shell sessions:
+
+- `/etc/profile`
+- `~/.bash_profile`
+- `~/.bash_login`
+- `~/.profile`
+
+Important files for non-login shell sessions:
+
+- `/etc/bash.bashrc`
+- `~/.bashrc`
+
+Usually the important files for login sessions will do something with bashrc.
+
+Shells also inherit environment variables from parent processes.
+
+The shell searches the PATH.
+
+Edit bashrc when needed (but create a backup first).
+
+## Arithmetic
+
+Use artihmetic expansion as `$((expression))`:
+
+```console
+$ echo $((2 + 2))
+4
+```
+
+Note that arithmetic expansion only supports integers.
+
+The operators `+`, `-`, `*`, `/`, `%` and `**` are supported.
 
 ## Conditionals
 
@@ -195,3 +234,16 @@ apropos "remove file"
 ## Aliases
 
 You can create aliases with the `alias` command and `unalias` to remove an alias.
+
+## Command Substitution
+
+Example:
+
+```sh
+echo $(ls)
+echo "$(ls)"
+```
+
+Use double quotes to suppress certain expansions.
+Use single quotes to suppress all expansions.
+Escape characters with backslashes.
