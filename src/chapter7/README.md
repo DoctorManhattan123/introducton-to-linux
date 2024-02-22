@@ -2,7 +2,11 @@
 
 ## Hello, World
 
-Create a script `test.sh`:
+So far we only executed simple commands in the terminal.
+For more complex scenarios, we might execute a lot of commands after each other, chain commands together or maybe execute commands conditionally.
+To achieve this, we could write a **shell script**
+
+Let's create a very simple test script and call it `test`:
 
 ```sh
 echo "Hello, world!"
@@ -11,8 +15,32 @@ echo "Hello, world!"
 Execute it:
 
 ```sh
-sh test.sh
+bash test
 ```
+
+This will print `Hello, world!`.
+
+Bash is the name for one of the most common Linux shells.
+However, it is not the only shell - there are many others like `ksh`, `csh` and `fish`.
+One particularly interesting shell is `sh`, which is an older shell whose features later became standardized in the POSIX standard.
+Bash implements all `sh` features and has some additional functionality - however, we will only talk about the `sh` compliant parts of bash.
+
+Because there are many other shells, it is often good practice to add a "shebang" on top of your shell to specify how your script should be executed:
+
+```sh
+#!/bin/bash
+
+echo "Hello, world!"
+```
+
+Instead of writing `bash test`, you can also mark your script as executable and then run it directly:
+
+```sh
+chmod u+x test
+./test
+```
+
+This will again print `Hello, world!`.
 
 ## Variables
 
@@ -20,59 +48,172 @@ You declare a variable using `variable=value` and use the variable by prefixing 
 For example:
 
 ```sh
-username="John"
-echo $username
+# You can assign a number to a variable
+number=1
+echo $number
+
+# You can assign a string to a variable.
+# If the string contains no whitespaces, you don't need
+# to put it in quotes, although it's usually recommended to do so.
+short_username=John
+echo $short_username
+
+short_username_2="John"
+echo $short_username_2
+
+long_username="John Doe"
+echo $long_username
+
+# You can use a variable in a string if you prefix it with $
+echo "Hello, $short_username"
+
+# You can also surround the variable with curly braces
+# in ambiguous expressions
+echo "Hello, ${short_username}1"
 ```
 
-## Environment Variables
+This will print the following:
 
-Environment variables are special variables that are defined outside your script.
-They are part of the environment in which the script runs.
-These variables contain information related to the system or user environment.
+```
+1
+John
+John
+John Doe
+Hello, John
+Hello, John1
+```
 
-For example `USER` contains the current user and `HOME` the home directory of the current user:
+An extremely common error that beginners make is adding spaces in assignments:
 
 ```sh
-echo $USER
-echo $HOME
+username = "John"
 ```
 
-Use `printenv` to print environment variables.
+This doesn't work and will result in the following error:
 
-There are login shell session and non-login shell sessions.
-
-Important files for login shell sessions:
-
-- `/etc/profile`
-- `~/.bash_profile`
-- `~/.bash_login`
-- `~/.profile`
-
-Important files for non-login shell sessions:
-
-- `/etc/bash.bashrc`
-- `~/.bashrc`
-
-Usually the important files for login sessions will do something with bashrc.
-
-Shells also inherit environment variables from parent processes.
-
-The shell searches the PATH.
-
-Edit bashrc when needed (but create a backup first).
+```sh
+./test: line 1: username: command not found
+```
 
 ## Arithmetic
 
-Use artihmetic expansion as `$((expression))`:
+The shell supports the usual operators `+`, `-`, `*`, `/`, `%` (modulo) and `**` (exponentiation).
 
-```console
-$ echo $((2 + 2))
-4
+You can perform arithmetic expansion using the `$((expression))` notation:
+
+```sh
+echo $((5 + 2)) # 7
+echo $((5 - 2)) # 3
+echo $((5 * 2)) # 10
+echo $((5 / 2)) # 2
+echo $((5 % 2)) # 1
+echo $((5 ** 2)) # 25
 ```
 
-Note that arithmetic expansion only supports integers.
+Note that division is truncated to integers and arithmetic expansion only supports integers.
 
-The operators `+`, `-`, `*`, `/`, `%` and `**` are supported.
+This will result in a syntax error:
+
+```sh
+echo $((5.2))
+```
+
+## Functions
+
+Just like most other programming languages, sh supports functions.
+You can define a function like this:
+
+```sh
+function_name() {
+    # commands
+}
+```
+
+You can the call the function by simply writing `function_name` (just like you would call a command).
+
+For example:
+
+```sh
+greet() {
+    echo "Hello, world!"
+}
+
+greet
+```
+
+This will output `Hello, world!`.
+
+If you need to pass parameters to a function, you don't write `greet(arg1, arg2)`.
+Instead, arguments passed to a function can be accessed using `$1`, `$2` etc:
+
+```sh
+greet() {
+    echo "Hello, $1!"
+}
+
+greet "World"
+```
+
+This will output `Hello, world!`.
+
+Here is an example with multiple parameters:
+
+```sh
+add() {
+    sum=$(( $1 + $2 + $3 ))
+    echo "Sum is: $sum"
+}
+
+# Call the function with 5, 10 and 15 as arguments
+add 5 10 15
+```
+
+If you want return a value from a function, you typically echo it and then capture the output via command substitution:
+
+```sh
+greet() {
+    echo "Hello, world!"
+}
+
+greeting=$(greet)
+echo $greeting
+```
+
+Generally, don't think of shell functions the same way you would think about e.g. Python or TypeScript functions.
+Instead, you should think of shell functions as kind of "mini-scripts".
+
+An important point with `sh` is that all variables are globaly by default, even if they're created in a function body:
+
+```sh
+fun() {
+    # Create a variable in function body
+	x=42
+    # This will output 42
+    echo "In body: $x"
+}
+
+# Call the function
+fun
+
+# This will also output 42
+echo "Outside body: $x"
+```
+
+If you want to create a local variable, you need to explicitly use the `local` keyword:
+
+```sh
+fun() {
+    # Create a variable in function body
+	local x=42
+    echo "In body: $x"
+}
+
+# Call the function
+fun
+
+# This will output an empty string
+echo "Outside body: $x"
+```
 
 ## Conditionals
 
@@ -116,43 +257,12 @@ done
 
 Example:
 
-```sh
+````sh
 count=1
 while [ $count -le 5 ]; do
     echo $count
     count=$((count + 1))
 done
-```
-
-## Functions
-
-Define a function:
-
-```sh
-function_name() {
-    # commands
-}
-```
-
-Example:
-
-```sh
-greet() {
-    echo "Hello, $1!"
-}
-
-greet "World"  # Outputs: Hello, World!
-```
-
-Functions can take parameters:
-
-```sh
-add() {
-    sum=$(( $1 + $2 ))
-    echo "Sum is: $sum"
-}
-
-add 5 10  # Calls the function with 5 and 10 as arguments
 ```
 
 ## Redirection
@@ -247,3 +357,41 @@ echo "$(ls)"
 Use double quotes to suppress certain expansions.
 Use single quotes to suppress all expansions.
 Escape characters with backslashes.
+
+## Environment Variables
+
+Environment variables are special variables that are defined outside your script.
+They are part of the environment in which the script runs.
+These variables contain information related to the system or user environment.
+
+For example `USER` contains the current user and `HOME` the home directory of the current user:
+
+```sh
+echo $USER
+echo $HOME
+```
+
+Use `printenv` to print environment variables.
+
+There are login shell session and non-login shell sessions.
+
+Important files for login shell sessions:
+
+- `/etc/profile`
+- `~/.bash_profile`
+- `~/.bash_login`
+- `~/.profile`
+
+Important files for non-login shell sessions:
+
+- `/etc/bash.bashrc`
+- `~/.bashrc`
+
+Usually the important files for login sessions will do something with bashrc.
+
+Shells also inherit environment variables from parent processes.
+
+The shell searches the PATH.
+
+Edit bashrc when needed (but create a backup first).
+````
