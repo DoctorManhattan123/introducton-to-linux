@@ -3,6 +3,7 @@
 ## What is a Process?
 
 A **process** is simply an instance of a program that is currently being executed.
+Basically, think of a process as a program in action.
 
 Consider the following Python script `hello.py`:
 
@@ -13,32 +14,35 @@ print("Hello, world!")
 If you run `python hello.py`, you will start a process that will print `"Hello, world!"`.
 Afterwards, the process will terminate.
 
-You can list processes on your system using the `ps` command.
+You can list the processes on your system using the `ps` command.
 For example, to list all processes you can run:
 
 ```sh
 ps -ef
 ```
 
-The `-e` flag selects all processes and the `-f` tells `ps` to do "full-format listing".
+The `-e` flag selects all processes and the `-f` flag tells `ps` to do "full-format listing".
 
 You can also show an interactive view of processes by executing the `top` command.
 
-A process usually has a "parent" that spawned it.
-
-Additionally a process may have a "controlling terminal".
-
 ## Parents and Children
 
-A program can launch another process.
+A process can launch another process.
 We say that a **parent process** launches a **child process**.
+This is in fact the main mechanism by which new processes are created.
+
+The way this works is that after the kernel has booted, an initial process is created.
+This process spawns new processes, which can in turn spawn new processes etc.
+Basically the processes form a giant tree, with the initial process as the root of that tree.
+
+Note that it is possible to have multiple initial processes, in which case you will have multiple process trees.
 
 ## PIDs
 
-Each process has a **PID** (process ID) which uniquely identifies a process.
+Each process has a **PID** (process ID) which is a number that uniquely identifies a process.
 You can see the PIDs in the output of `ps -ef`.
 
-The **PPID** (parent process ID) of a process is simply the PID of its parent.
+Each process also has a **PPID** (parent process ID) which is simply the PID of its parent.
 
 You can use the `-p` flag to get information about a process with a specific PID.
 For example here is how you list information about the process with PID `1`:
@@ -47,9 +51,70 @@ For example here is how you list information about the process with PID `1`:
 ps -f -p 1
 ```
 
+Let's consider an example.
+Create the following file `parent.py`
+
+```python
+import os
+import subprocess
+
+print(f"Parent PID={os.getpid()}")
+print(f"Parent PPID={os.getppid()}")
+
+subprocess.Popen(["python", "child.py"])
+
+input("Press Enter to exit.\n")
+```
+
+Also create the following file `child.py` in the same directory:
+
+```python
+import os
+import time
+
+print(f"Child PID={os.getpid()}")
+print(f"Child PPID={os.getppid()}")
+
+while True:
+    print("Child process running")
+    time.sleep(3)
+```
+
+Run `python parent.py` and observe the following terminal output:
+
+```
+Parent PID=148411
+Parent PPID=144069
+Press Enter to exit.
+Child PID=148469
+Child PPID=148411
+Child process running
+Child process running
+Child process running
+Child process running
+...
+```
+
+> Of course your PIDs and PPIDs will be different.
+
+The parent process (`python parent.py`) with PID `148411` has created a child process (`python child.py`).
+That child process has a completely new PID `148469`, however its PPID is the ID of the parent process, i.e. `148411`.
+
+You can observe this with the `ps` command:
+
+```console
+$ ps -f 148411
+UID          PID    PPID  C STIME TTY      STAT   TIME CMD
+example   148411  144069  0 19:06 pts/2    S+     0:00 python parent.py
+
+$ ps -f 148469
+UID          PID    PPID  C STIME TTY      STAT   TIME CMD
+example   148469  148411  0 19:06 pts/2    S+     0:00 python child.py
+```
+
 ## Process States
 
-A Linux process has a state.
+A process has a state.
 The three most important states are:
 
 - running (`R`)
