@@ -402,3 +402,77 @@ You can then safely close the terminal - the web server will keep running.
 However, for production setups web server usually utilize proper process supervisors like `systemd`.
 
 ## The `systemd` Tool
+
+The `systemd` tool allows you to manage services.
+
+Consider the following example:
+
+```python
+import time
+
+with open("/tmp/example.txt", "w") as f:
+    while True:
+        f.write("Running...")
+        f.flush()
+        time.sleep(3)
+```
+
+To manage this script using `systemd` we need to create a service unit file that will define how to start, stop and manage this script.
+Create the following file at `/etc/systemd/system/procpy.service`:
+
+```ini
+[Unit]
+Description=procpy
+After=network.target
+
+[Service]
+ExecStart=python /path/to/proc.py
+Restart=always
+User=exampleuser
+Group=examplegroup
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Start the service:
+
+```sh
+sudo systemctl start procpy.service
+```
+
+You can check the status of the service by running:
+
+```sh
+systemctl status procpy.service
+```
+
+Finally, you can stop the service:
+
+```sh
+sudo systemctl stop procpy.service
+```
+
+To automatically start a service at boot, you can use the `enable` command:
+
+```sh
+sudo systemctl enable procpy.service
+```
+
+To disable the service from starting automatically, you can use the `disable` command:
+
+```sh
+sudo systemctl disable procpy.service
+```
+
+If your system is failing to start, you can look at the journalctl logs:
+
+```sh
+journalctl -u procpy.service
+```
+
+Finally, if you need to change the service file, you will have to run this command before restarting the service:
+
+```sh
+sudo systemctl daemon-reload
+```
