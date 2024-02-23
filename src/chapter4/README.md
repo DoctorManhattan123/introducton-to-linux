@@ -22,11 +22,16 @@ ps -ef
 
 The `-e` flag selects all processes and the `-f` tells `ps` to do "full-format listing".
 
-You can also show an interactive view of processes by executing the `htop` command.
+You can also show an interactive view of processes by executing the `top` command.
 
 A process usually has a "parent" that spawned it.
 
 Additionally a process may have a "controlling terminal".
+
+## Parents and Children
+
+A program can launch another process.
+We say that a **parent process** launches a **child process**.
 
 ## PIDs
 
