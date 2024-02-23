@@ -167,42 +167,174 @@ This also makes sense, because the process is waiting for the timer to complete 
 
 Finally, once the process receives the SIGTSTP signal, the status column will show a `T` - `T` is short for "stopped".
 
+> There are more states a process can be in (like "zombie"), but these are out of scope for this book.
+
 ## Signals
 
 **Signals** are basically notifications that can be used to tell a process to do something special.
 
-The **SIGINT** (signal interrupt) can the controlling terminal to indicate that a user wants to interrupt the process.
-If you start a process and you press `^C` in the terminal that sends a SIGINT.
+You can send a signal to a process either by invoking the `kill` command or by using certain keyboard shortcuts on the controlling terminal.
 
-The **SIGTERM** (signal terminate) "politely" tells a process to terminate.
-This signal can be caught and ignored by the process (hence the "polite" termination).
-Usually you should terminate a process using the SIGTERM signal, because that allows the process to potentially perform cleanup.
-You can send a SIGTERM using e.g. `kill -TERM $PID`.
+To showcase the effect of different signals, we will use the following `proc.py` example:
 
-The **SIGKILL** (signal kill) forces a process to terminate.
+```python
+import os
+import time
+
+print(os.getpid())
+
+while True:
+    print("Running...")
+    time.sleep(1)
+```
+
+The **SIGINT** (signal interrupt) can be sent by the controlling terminal to indicate that a user wants to interrupt the process.
+
+Start the process by running `python proc.py` and press `^C` in the terminal.
+This will send a SIGINT to the process.
+In the case of Python, a `KeyboardInterrupt` will be raised and the process will be killed.
+
+However, a SIGINT can also be explicitly handled by the process, resulting in different behaviour.
+Consider this example:
+
+```python
+import os
+import signal
+import time
+
+print(os.getpid())
+
+def handler(signum, frame):
+    print("I received the SIGINT, but I will just keep running...")
+
+signal.signal(signal.SIGINT, handler)
+
+while True:
+    print("Running...")
+    time.sleep(1)
+```
+
+If you try to press `^C` now, the process will just print the message and keep running.
+
+> If you press `^C` and a process doesn't die, that means that it has registered a signal handler.
+> So keep in mind that `^C` doesn't actually necessarily kill a process in all cases.
+
+You can also sending a SIGINT by executing `kill -SIGINT $PID`.
+
+The **SIGTERM** (signal terminate) "politely" tells a process to die for good.
+This signal can be caught and ignored by the process (hence the "polite").
+
+You can send a SIGTERM by executing `kill -SIGTERM $PID`.
+
+Just like the SIGINT, a SIGTERM can be caught:
+
+```python
+import os
+import signal
+import time
+
+print(os.getpid())
+
+def handler(signum, frame):
+    print("I received the SIGTERM, but I will just keep running...")
+
+signal.signal(signal.SIGTERM, handler)
+
+while True:
+    print("Running...")
+    time.sleep(1)
+```
+
+The difference between SIGINT and SIGTERM is a bit philosophical.
+A SIGINT is usually an signal from a user requesting immediate interruption, while SIGTERM is usually a termination request by a system service (or script).
+
+If you are a regular user and you need to interrupt a process, you should send a SIGINT by pressing `^C`.
+If you write a system script that needs to terminate certain processes, you should send a SIGTERM.
+
+Note that the fact that a process can catch a SIGINT or SIGTERM is not a bug, but a feature.
+For example a process might choose to perform some cleanup upon receiving a SIGINT (or SIGTERM), which is often a good idea.
+
+The **SIGKILL** (signal kill) is the "impolite" version of a SIGTERM.
 This signal can't be caught by the process.
-You should send a SIGKILL as a last resort if the process ignores your polite request to die after a SIGTERM.
-You can send a SIGKILL using e.g. `kill -KILL $PID`.
+This means that process will be terminated immediately (by the operating system).
+
+You should send a SIGKILL as a last resort if the process ignores your more polite requests to die.
+You can send a SIGKILL using e.g. `kill -SIGKILL $PID`.
 
 The **SIGHUP** (signal hangup) is sent to a process when the controlling terminal is closed.
-If you start a process and close the terminal that sends a SIGHUP.
+If you start a process and close the terminal that will send a SIGHUP.
+You can also send a SIGHUP using e.g. `kill -SIGHUP $PID`.
 
-You can "detach" a process from its terminal by telling it to ignore SIGHUP signals using the `nohup` command:
+Note that a SIGHUP can be caught:
+
+```python
+import os
+import signal
+import time
+
+print(os.getpid())
+
+def handler(sig, frame):
+    with open("hup", "w") as f:
+        f.write("I caught the SIGHUP")
+
+signal.signal(signal.SIGHUP, handler)
+
+while True:
+    print("Running...")
+    time.sleep(1)
+```
+
+If you run `python proc.py` and then close the controlling terminal, you will see that a new file `hup` has been created in the same directory as `proc.py`.
+
+You can "detach" a process from its terminal by telling it to ignore SIGHUP signals using the `nohup` command.
+Consider the following example:
+
+```python[1]+ Stopped                 python easy.py
+import time
+import os
+
+print(os.getpid(), flush=True)
+
+while True:
+    print("Running...", flush=True)
+    time.sleep(1)
+```
+
+Now run:
 
 ```
-nohup python3 example.py &
+nohup python example.py
 ```
+
+If you close the controlling terminal, you will see that the process will still be running.
+You can confirm that by inspecting the `nohup.out` file, getting the process ID and executing `ps -f -p $PID`.
+
+The `nohup` command is useful for scenarios where you need to start a process in a terminal, but keep it running even if the terminal is closed.
 
 The **SIGTSTP** (signal terminal stop) "politely" stops a process.
 This signal can be caught and ignored by the process (just like SIGTERM).
 If you start a process and you press `^Z` in the terminal that sends a SIGTSTP.
+You can also use e.g. `kill -SIGTSTP $PID`.
 
-The **SIGSTOP** (signal stop) stops a process.
+The **SIGSTOP** (signal stop) is again the "impolite" version of SIGTSTP.
 This signal can't be caught by the process (just like SIGKILL).
-You can send a SIGSTOP using e.g. `kill -STOP $PID`.
+You can send a SIGSTOP using e.g. `kill -SIGSTOP $PID`.
 
 You can resume a stopped process using **SIGCONT**.
 You can send a SIGCONT using `kill -CONT $PID`.
+
+Consider the `proc.py` example script.
+If you run `python proc.py` and then press `^Z`, you will see the following output in the terminal:
+
+```
+[1]+  Stopped                 python easy.py
+```
+
+Executing `ps -f $PID` will reveal that the process is still very much alive and kicking, but it is in the stopped (`T`) state.
+
+You can resume the process by executing `kill -SIGCONT $PID`.
+It will then continue its executing and keep printing "Running...".
 
 > Yes, the `kill` command has a _very unfortunate and confusing_ name.
 > It should have been named `sendsignal` or something similar.
@@ -225,9 +357,8 @@ for i in range(30):
 If you simply run the normal command `python example.py`, this will create a **foreground process**.
 This is a process that is connected to a terminal.
 
-This menas that the user can interact with the process (e.g. input some data).
+This means that the user can interact with the process (e.g. input some data or send a SIGINT).
 Foreground processes also take control of the terminal, i.e. you can't use the terminal for anything else while the process is running.
-You can also stop the process with `^C`.
 
 You can create a **background process** by adding a `&` to the end of the command.
 For example:
@@ -236,24 +367,38 @@ For example:
 python example.py &
 ```
 
-Notice that you can now interact with the terminal normally, however you will still see the output.
+Notice that you can now interact with the terminal normally, but you will still see the output.
+You can no longer interact with the process however, for example pressing `^C` will no longer send a SIGINT.
+
 You can execute the `jobs` command to see the status of background processes that are currently running.
 
 If you do so, you will (among other things) see the following entry:
 
 ```
-[3]   Running                 python example.py &
+[1]   Running                 python example.py &
 ```
 
-Notice that you can't stop a background process with `^C`.
-
 To bring a background process to the foreground, simply run `fg %NUM`, where `NUM` is the number of the job.
-In the above example the job number was `3`, so we would run:
+In the above example the job number was `1`, so we would run:
 
 ```sh
-fg %3
+fg %1
 ```
 
 You can use foreground processes if you need to interact with the process or your process produces a lot of output and you need to heavily monitor it.
 
 You can use background processes if you need to run tasks that take a long time, don't need to be monitored by you or you want to run multiple tasks at the same time.
+
+If you want to make sure that the controlling terminal no longer has any impact on the process, you can combine the `nohup` command with background processes:
+
+```sh
+nohup python proc.py &
+```
+
+You can now do anything you want in your terminal and even close it - the process will just keep running along.
+
+Doing this is the simplest way to start e.g. a long running web server - just `nohup` it and sends the process to the background.
+You can then safely close the terminal - the web server will keep running.
+However, for production setups web server usually utilize proper process supervisors like `systemd`.
+
+## The `systemd` Tool
