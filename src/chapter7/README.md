@@ -95,6 +95,10 @@ This doesn't work and will result in the following error:
 ./test: line 1: username: command not found
 ```
 
+## Command Substitution
+
+TODO
+
 ## Arithmetic
 
 The shell supports the usual operators `+`, `-`, `*`, `/`, `%` (modulo) and `**` (exponentiation).
@@ -229,6 +233,28 @@ else
 fi
 ```
 
+Make sure that there is a space after `[` and a space before `]`.
+
+The conditions must be expressions that evaluate to true or false.
+Here you can use comparison operators like `-eq`, `-ne`, `-lt`, `-le`, `-gt` and `-ge` for numeric comparisons.
+For example:
+
+```sh
+age=14
+
+if [ $age -lt 17 ]; then
+	echo "No drinks for you!"
+elif [ $age -eq 17 ]; then
+	echo "So close!"
+else
+	echo "Have fun!"
+fi
+```
+
+You can also use the operators `=`, `!=` for string comparisons.
+
+You can also use `-a` (and), `-o` (or) and the `!` (not) operators.
+
 ## Loops
 
 You can use a `for` loop:
@@ -257,7 +283,7 @@ done
 
 Example:
 
-````sh
+```sh
 count=1
 while [ $count -le 5 ]; do
     echo $count
@@ -265,10 +291,12 @@ while [ $count -le 5 ]; do
 done
 ```
 
-## Redirection
+## Stdin, Stdout and Stderr
 
 Programs usually send results to **stdout** and errors to **stderr** and take input from **stdin**.
 They are internaly referenced as 0 (stdin), 1 (stdout), 2 (stderr).
+
+## Redirection
 
 You can use I/O redirection to redirect where stdout goes with `>` or `>>`.
 To redirect stderr we use `2>`.
@@ -283,80 +311,6 @@ We can create the worlds simplest text editor with `cat > output`.
 ## Pipe Operator
 
 The pipe operator `|` can be used to pipe stdout of one command to stdin of another command.
-
-## Interesting Commands
-
-There are basically four types of commands:
-
-- executable programs (compiled binaries or scripts)
-- shell builtins
-- shell functions
-- aliases
-
-Use `type` to display a command type:
-
-```console
-$ type cd
-cd is a shell builtin
-$ type ls
-ls is aliased to `ls --color=auto'
-$ type mv
-mv is /usr/bin/mv
-```
-
-Use `which` to get the locatino of an executable:
-
-```console
-$ which mv
-/usr/bin/mv
-```
-
-Use `help` to get help for shell builtins:
-
-```sh
-help cd
-```
-
-For most commands you can try `--help`:
-
-```sh
-mv --help
-```
-
-Use `whatis` for a one-line description:
-
-```sh
-whatis mv
-```
-
-You can also try to view the **man page** (manual page):
-
-```sh
-man mv
-```
-
-You can search the man pages with `apropos`:
-
-```sh
-apropos "remove file"
-```
-
-## Aliases
-
-You can create aliases with the `alias` command and `unalias` to remove an alias.
-
-## Command Substitution
-
-Example:
-
-```sh
-echo $(ls)
-echo "$(ls)"
-```
-
-Use double quotes to suppress certain expansions.
-Use single quotes to suppress all expansions.
-Escape characters with backslashes.
 
 ## Environment Variables
 
@@ -394,4 +348,3 @@ Shells also inherit environment variables from parent processes.
 The shell searches the PATH.
 
 Edit bashrc when needed (but create a backup first).
-````
