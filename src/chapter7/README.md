@@ -326,25 +326,3 @@ echo $HOME
 ```
 
 Use `printenv` to print environment variables.
-
-There are login shell session and non-login shell sessions.
-
-Important files for login shell sessions:
-
-- `/etc/profile`
-- `~/.bash_profile`
-- `~/.bash_login`
-- `~/.profile`
-
-Important files for non-login shell sessions:
-
-- `/etc/bash.bashrc`
-- `~/.bashrc`
-
-Usually the important files for login sessions will do something with bashrc.
-
-Shells also inherit environment variables from parent processes.
-
-The shell searches the PATH.
-
-Edit bashrc when needed (but create a backup first).
