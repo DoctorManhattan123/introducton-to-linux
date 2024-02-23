@@ -114,14 +114,24 @@ example   148469  148411  0 19:06 pts/2    S+     0:00 python child.py
 
 ## Process States
 
-A process has a state.
-The three most important states are:
+A process can be in a **state**.
 
-- running (`R`)
-- sleeping (`S`)
-- stopped (`T`)
+The three most important state are **running**, **sleeping** and **stopped**.
 
-Here is a Python script that cycles through the states:
+A process is running if it's either currently being executed by the CPU or is on a "run queue" (i.e. will be executed as soon as the CPU is available).
+Basically, processes that are in the running state are actively doing some work or are about to do some work.
+
+A process is sleeping if it's waiting for something to happen (like an event or it's waiting for some time to pass).
+During this time, a process is not executing any code.
+
+The most common type of sleep is the **interruptible sleep** can be interrupted by signals (we will talk about them below).
+However, there is also the **uninterruptible sleep**, which is a special sleep mode in which a process can't be interrupted by a signal.
+
+A process can also be in the stopped state, which is rather self explanatory.
+Usually, a process is stopped because it has received a signal.
+Note that a process tha was stopped can be restarted where it left off.
+
+Here is a Python script `proc.py` that cycles through the states:
 
 ```python
 import time
@@ -145,6 +155,57 @@ time.sleep(10)
 print("State: Stopped")
 os.kill(os.getpid(), signal.SIGTSTP)
 ```
+
+Execute the script by running `python proc.py`.
+The script will print a PID - now run `watch proc -f $PID`.
+
+While the process is calculating the number `k`, you will see an `R+` in the status column - `R` is short for "running".
+This makes sense, because the process is actively using the CPU for number crunching.
+
+When the `time.sleep` is called, the status column will show an `S+` in the status column - `S` is short for "sleeping".
+This also makes sense, because the process is waiting for the timer to complete and is not actively executing any code.
+
+Finally, once the process receives the SIGTSTP signal, the status column will show a `T` - `T` is short for "stopped".
+
+## Signals
+
+**Signals** are basically notifications that can be used to tell a process to do something special.
+
+The **SIGINT** (signal interrupt) can the controlling terminal to indicate that a user wants to interrupt the process.
+If you start a process and you press `^C` in the terminal that sends a SIGINT.
+
+The **SIGTERM** (signal terminate) "politely" tells a process to terminate.
+This signal can be caught and ignored by the process (hence the "polite" termination).
+Usually you should terminate a process using the SIGTERM signal, because that allows the process to potentially perform cleanup.
+You can send a SIGTERM using e.g. `kill -TERM $PID`.
+
+The **SIGKILL** (signal kill) forces a process to terminate.
+This signal can't be caught by the process.
+You should send a SIGKILL as a last resort if the process ignores your polite request to die after a SIGTERM.
+You can send a SIGKILL using e.g. `kill -KILL $PID`.
+
+The **SIGHUP** (signal hangup) is sent to a process when the controlling terminal is closed.
+If you start a process and close the terminal that sends a SIGHUP.
+
+You can "detach" a process from its terminal by telling it to ignore SIGHUP signals using the `nohup` command:
+
+```
+nohup python3 example.py &
+```
+
+The **SIGTSTP** (signal terminal stop) "politely" stops a process.
+This signal can be caught and ignored by the process (just like SIGTERM).
+If you start a process and you press `^Z` in the terminal that sends a SIGTSTP.
+
+The **SIGSTOP** (signal stop) stops a process.
+This signal can't be caught by the process (just like SIGKILL).
+You can send a SIGSTOP using e.g. `kill -STOP $PID`.
+
+You can resume a stopped process using **SIGCONT**.
+You can send a SIGCONT using `kill -CONT $PID`.
+
+> Yes, the `kill` command has a _very unfortunate and confusing_ name.
+> It should have been named `sendsignal` or something similar.
 
 ## Foreground and Background Processes
 
@@ -196,43 +257,3 @@ fg %3
 You can use foreground processes if you need to interact with the process or your process produces a lot of output and you need to heavily monitor it.
 
 You can use background processes if you need to run tasks that take a long time, don't need to be monitored by you or you want to run multiple tasks at the same time.
-
-## Signals
-
-**Signals** are basically notifications that can be used to tell a process to do something special.
-
-The **SIGINT** (signal interrupt) can the controlling terminal to indicate that a user wants to interrupt the process.
-If you start a process and you press `^C` in the terminal that sends a SIGINT.
-
-The **SIGTERM** (signal terminate) "politely" tells a process to terminate.
-This signal can be caught and ignored by the process (hence the "polite" termination).
-Usually you should terminate a process using the SIGTERM signal, because that allows the process to potentially perform cleanup.
-You can send a SIGTERM using e.g. `kill -TERM $PID`.
-
-The **SIGKILL** (signal kill) forces a process to terminate.
-This signal can't be caught by the process.
-You should send a SIGKILL as a last resort if the process ignores your polite request to die after a SIGTERM.
-You can send a SIGKILL using e.g. `kill -KILL $PID`.
-
-The **SIGHUP** (signal hangup) is sent to a process when the controlling terminal is closed.
-If you start a process and close the terminal that sends a SIGHUP.
-
-You can "detach" a process from its terminal by telling it to ignore SIGHUP signals using the `nohup` command:
-
-```
-nohup python3 example.py &
-```
-
-The **SIGTSTP** (signal terminal stop) "politely" stops a process.
-This signal can be caught and ignored by the process (just like SIGTERM).
-If you start a process and you press `^Z` in the terminal that sends a SIGTSTP.
-
-The **SIGSTOP** (signal stop) stops a process.
-This signal can't be caught by the process (just like SIGKILL).
-You can send a SIGSTOP using e.g. `kill -STOP $PID`.
-
-You can resume a stopped process using **SIGCONT**.
-You can send a SIGCONT using `kill -CONT $PID`.
-
-> Yes, the `kill` command has a _very unfortunate and confusing_ name.
-> It should have been named `sendsignal` or something similar.
