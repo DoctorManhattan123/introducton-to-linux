@@ -156,9 +156,195 @@ client_socket.close()
 
 ## HTTP
 
+### HTTP Basics
+
 HTTP builds on top of TCP.
+
+HTTP is a **server-client protocol**.
+A client (for example a web browser) communicates with a server (for example some Python service).
+
 HTTP is a request-response protocol, i.e. HTTP clients send requests to an HTTP server and receive a response in return.
+Requests are pretty much always sent by the HTTP client.
 
 HTTP knows many different request methods, the two most common of which are **GET** and **POST**.
 GET requests are generally used to retrieve data.
 POST requests are generally used to send information to the server that tell it to update some information.
+
+For example, let's use `curl` to retrieve `https://example.com`:
+
+```sh
+curl --trace-ascii example.txt http://example.com
+```
+
+Looking at `example.txt`, we will see:
+
+```
+GET / HTTP/1.1
+Host: example.com
+User-Agent: curl/7.81.0
+Accept: */*
+```
+
+The request contains:
+
+The HTTP method that defines the operation the client wants to perform.
+
+The path of the resource to fetch (`/` in this case).
+Note that the path is "relative" to the origin.
+
+The version of the HTTP protocol (`HTTP/1.1` in this case).
+
+This is followed by optional headers.
+For example in this case we inform the server that our User-Agent is `curl/7.81.0`.
+
+The response:
+
+```
+HTTP/1.1 200 OK
+Accept-Ranges: bytes
+Age: 343881
+Cache-Control: max-age=604800
+Content-Type: text/html; charset=UTF-8
+Date: Sun, 03 Mar 2024 09:05:25 GMT
+Etag: "3147526947"
+Expires: Sun, 10 Mar 2024 09:05:25 GMT
+Last-Modified: Thu, 17 Oct 2019 07:18:26 GMT
+Server: ECS (nyd/D146)
+Vary: Accept-Encoding
+X-Cache: HIT
+Content-Length: 1256
+
+<!doctype html>
+...
+</html>
+```
+
+This contains the protocol version, the status code, the status text.
+This is followed by the headers.
+This is followed by the data.
+
+Status codes
+
+### Headers
+
+The most important request headers are the following.
+
+The `Host` header specifies the host (and optionally port) of the server to which the request is being sent.
+This header is mandatory.
+
+The `User-Agent` header is a string that tells servers information about the client.
+This could include the application, operating system, vendor and version of the client.
+For example:
+
+```
+Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:123.0) Gecko/20100101 Firefox/123.0
+```
+
+The `Accept` header describes which content types (MIME types) a client can understand:
+
+```
+text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+```
+
+The `Accept-Language` header specifies the natural language that the client prefers:
+
+```
+en-US,en;q=0.5
+```
+
+The `Content-Type` header indicates the type of the request body (usually used with `POST` requests).
+
+The most important response headers are the following.
+
+The `Content-Type` header specifies the media type of the response content.
+For example if the server sends back an HTML, this would be the `Content-Type`:
+
+```
+text/html; charset=UTF-8
+```
+
+The `Content-Length` indicates the size of the message body in bytes.
+
+### Cookies
+
+Cookies are data the a server can send to a web browser.
+The web browser can store the cookie and send it back to the server with later requests.
+
+Cookies are useful for remembering information between requests.
+There are three primary functions:
+
+- session management
+- personalization
+- tracking
+
+Note that cookies should not be used for general storage (local storage and session storage should be used instead).
+
+Here is the Flask app:
+
+```python
+from flask import Flask, request, make_response, render_template_string
+
+app = Flask(__name__)
+
+html_content = """
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cookie Test</title>
+</head>
+<body>
+    <button id="setCookieBtn">Set Cookie</button>
+    <button id="getCookieBtn">Get Cookie</button>
+    <script>
+        document.getElementById('setCookieBtn').onclick = function() {
+            fetch('/set-cookie')
+                .then(response => response.text())
+                .then(data => console.log(data));
+        };
+
+        document.getElementById('getCookieBtn').onclick = function() {
+            fetch('/get-cookie')
+                .then(response => response.text())
+                .then(data => console.log(data));
+        };
+    </script>
+</body>
+</html>
+"""
+
+@app.route('/')
+def home():
+    return render_template_string(html_content)
+
+@app.route('/set-cookie')
+def set_cookie():
+    resp = make_response("Cookie is set")
+    resp.set_cookie('example_cookie', 'Example')
+    return resp
+
+@app.route('/get-cookie')
+def get_cookie():
+    cookie_value = request.cookies.get('example_cookie', 'Cookie not found')
+    return f'Cookie value: {cookie_value}'
+
+if __name__ == '__main__':
+    app.run(debug=True)
+```
+
+If you click the `Set Cookie` button, you will see the following response header:
+
+```
+Set-Cookie: example_cookie=Example; Path=/
+```
+
+If you click the `Get Cookie` button, you will see the following request header:
+
+```
+example_cookie=Example
+```
+
+### Redirects
+
+HTTP Redirects allow you to redirect a client to another page.
+
+Redirects have a `3xx` status code and a `Location` response header indicating the URL to redirect to.
