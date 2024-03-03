@@ -348,3 +348,29 @@ example_cookie=Example
 HTTP Redirects allow you to redirect a client to another page.
 
 Redirects have a `3xx` status code and a `Location` response header indicating the URL to redirect to.
+
+## HTTPS
+
+HTTPS adds encryption on top of HTTP.
+
+Before any traffic is sent, an SSL/TLS handshake is performed.
+The client generates a private key and a public key.
+The server also generates a private key and a public key.
+
+The private keys are kept secret, the public keys are exchanged.
+The client and server both compute a shared key.
+The server computes the shared key from the private key of the server and the public key of the client.
+The client computes the shared key from the private key of the client and the public key of the server.
+Because of the way public-key cryptography works, the two computed values will be the same.
+
+> The full details are complex and out of scope for this book.
+> Additionally, in modern TLS versions the client and the server generate emphemeral (temporary) keys specific to each session.
+
+However, we still have a problem due to so called "man-in-the-middle" attacks.
+A malicious entity could pretend to be e.g. `google.com` and present us his public key.
+Therefore we need a way to validate that a public key indeed belongs to a certain domain.
+
+An SSL certificate does just that.
+It contains the public key and the domain name.
+It is signed by some entity that our browser trusts.
+Note that there might be intermediate certificates leading to a chain of trust.
