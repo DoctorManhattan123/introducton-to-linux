@@ -473,17 +473,38 @@ sh example.sh < example.txt
 
 The pipe operator `|` can be used to pipe stdout of one command to stdin of another command.
 
+Consider the following two scripts.
+The first script `generate.sh` generates numbers from 1 to 5 and writes them to stdout:
+
+```sh
+seq 1 5
+```
+
+Now consider a second script `square.sh` that reads number from stdin and prints their squares:
+
+```sh
+while read number; do
+  echo $((number * number))
+done
+```
+
+You can use the `|` operator to pass the output of `generate.sh` to `square.sh`:
+
+```
+./generate.sh | ./square.sh
+```
+
 ## Environment Variables
 
 Environment variables are special variables that are defined outside your script.
 They are part of the environment in which the script runs.
 These variables contain information related to the system or user environment.
 
-For example `USER` contains the current user and `HOME` the home directory of the current user:
+For example the `USER` environment variable contains the current user and `HOME` the home directory of the current user:
 
 ```sh
 echo $USER
 echo $HOME
 ```
 
-Use `printenv` to print environment variables.
+You can use `printenv` to print the currently set environment variables.
