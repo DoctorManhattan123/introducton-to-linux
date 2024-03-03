@@ -306,13 +306,51 @@ else
 fi
 ```
 
-You can also use the operators `=`, `!=` for string comparisons.
+You can also use the operators `=`, `!=` for equality comparisons.
+For example:
 
-You can also use `-a` (and), `-o` (or) and the `!` (not) operators.
+```sh
+number="one"
+
+if [ $number = "one" ]; then
+    echo "We are number one!"
+elif [ $number = "two" ]; then
+    echo "We are number two!"
+else
+    echo ":("
+fi
+```
+
+You can also use `-a` (and), `-o` (or) and the `!` (not) operators to combine conditions.
+For example:
+
+```sh
+user="admin"
+logged_in="true"
+
+if [ $user = "admin" -a $logged_in = "true" ]; then
+    echo "Welcome, admin!"
+fi
+```
+
+Bash introduces additional syntax that looks more like conditionals in other programming languages.
+You can write `[[ ]]` instead of `[ ]` to allow for operators like `&&` (and), `||` (or) and `==` (same as `=`).
+For example, the previous example could be writen like this in Bash:
+
+```sh
+user="admin"
+logged_in="true"
+
+if [[ $user = "admin" && $logged_in = "true" ]]; then
+    echo "Welcome, admin!"
+fi
+```
 
 ## Loops
 
-You can use a `for` loop:
+The shell supports most of the familiar loops.
+
+The general syntax for a `for` loop looks like this:
 
 ```sh
 for item in list; do
@@ -320,7 +358,7 @@ for item in list; do
 done
 ```
 
-Example:
+For example:
 
 ```sh
 for i in 1 2 3; do
@@ -328,7 +366,7 @@ for i in 1 2 3; do
 done
 ```
 
-You can use a while loop:
+The general syntax for a `while` loop looks like this:
 
 ```sh
 while [ condition ]; do
@@ -336,7 +374,7 @@ while [ condition ]; do
 done
 ```
 
-Example:
+For example:
 
 ```sh
 count=1
@@ -351,17 +389,85 @@ done
 Programs usually send results to **stdout** and errors to **stderr** and take input from **stdin**.
 They are internaly referenced as 0 (stdin), 1 (stdout), 2 (stderr).
 
-## Redirection
+For example, the output of `echo` is sent to `stdout` by default:
+
+```sh
+echo "This is sent to stdout"
+```
+
+You can read user input from `stdin` by using the `read` command:
+
+```sh
+read -p "Enter a value: " input
+echo $input
+```
 
 You can use I/O redirection to redirect where stdout goes with `>` or `>>`.
-To redirect stderr we use `2>`.
+For example, you can redirect stdout to a file like this:
 
-We can redirect stdout and stderr to a file using `> filename 2>&1` (i.e. redirect stdout to file and stderr to stdout).
-Alternatively you can use `&>` for combined redirection.
+```sh
+echo "This will be written to example.txt" > example.txt
+```
 
-Use `<` to redirect stdin.
+The difference between `>` and `>>` is that `>` will overwrite the file, while `>>` will append to the file.
+Consider this example:
 
-We can create the worlds simplest text editor with `cat > output`.
+```sh
+echo -n "This first line will be overwritten" > example.txt
+echo "Second line" > example.txt
+```
+
+The resulting file will look like this:
+
+```
+Second line
+```
+
+Now consider this example:
+
+```sh
+echo "This first line will be overwritten" >> example.txt
+echo "Second line" >> example.txt
+```
+
+The resulting file will look like this:
+
+```
+This first line will be overwritten
+Second line
+```
+
+We can also use `>` to redirect `stdout` to `stderr` via the `1>&2` notation.
+For example, here is how we can write something to `stderr`:
+
+```
+echo "This will be written to stderr" 1>&2
+```
+
+We can also use `>` to redirect stderr to stdout via the `2>&1` notation.
+
+This is usually interesting for the cases where want to redirect both stdout and stderr to a file using `> filename 2>&1`.
+Note that the order of the redirects is important here:
+
+First, we redirect `stdout` to `filename`.
+Second, we redirect `stderr` to `stdout`.
+Since `stdout` is redirected to `filename`, `stderr` will also be redirected to `filename`.
+
+> We can also use the `>` operator to create the worlds simplest text editor by running `cat > output`.
+
+We can use the `<` operator to redirect stdin.
+Consider this script that read a line from a user and outputs it back:
+
+```sh
+read -p "Enter a line:" line
+echo $line
+```
+
+If you want to read that line from a file instead, you can create a new file containing the line and then use `<` to redirect `stdin` from the file:
+
+```
+sh example.sh < example.txt
+```
 
 ## Pipe Operator
 
