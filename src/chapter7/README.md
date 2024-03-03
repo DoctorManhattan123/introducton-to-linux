@@ -3,29 +3,44 @@
 ## Hello, World
 
 So far we only executed simple commands in the terminal.
-For more complex scenarios, we might execute a lot of commands after each other, chain commands together or maybe execute commands conditionally.
-To achieve this, we could write a **shell script**
+For more complex scenarios, we might want execute a sequence of commands after each other, chain commands together, repeat commands or maybe even execute commands conditionally.
 
-Let's create a very simple test script and call it `test`:
+We can achieve this by writing **shell scripts**.
+
+Let's create a very simple example script `example.sh` with the following content:
 
 ```sh
 echo "Hello, world!"
 ```
 
-Execute it:
+We can execute that example script by running:
 
 ```sh
-bash test
+sh test.sh
 ```
 
-This will print `Hello, world!`.
+This will output `Hello, world!` to the terminal.
 
-Bash is the name for one of the most common Linux shells.
-However, it is not the only shell - there are many others like `ksh`, `csh` and `fish`.
-One particularly interesting shell is `sh`, which is an older shell whose features later became standardized in the POSIX standard.
-Bash implements all `sh` features and has some additional functionality - however, we will only talk about the `sh` compliant parts of bash.
+## Choosing Your Flavour
 
-Because there are many other shells, it is often good practice to add a "shebang" on top of your shell to specify how your script should be executed:
+The are many different shells available for Linux - `sh`, `bash`, `ksh`, `csh` and `fish` are just a few examples.
+
+We will primarily focus on `sh` and `bash`.
+The `sh` shell is an older shell whose features later became standardized in the so called **POSIX standard**.
+The `bash` shell is a newer shell that implements all `sh` features and has some additional functionality.
+We will primarily talk about the `sh` compliant parts of bash.
+If some `bash` feature is not compatible with `sh` we will explicitly mention it.
+
+Because there are many different shells, it is often good practice to add a **shebang** on top of your shell to specify how your script should be executed.
+For example if we want to execute our script with `sh` we would specify the location of `bash` as the shebang:
+
+```sh
+#!/bin/sh
+
+echo "Hello, world!"
+```
+
+Alternatively, we could specify that our script should be executed with `bash` like this:
 
 ```sh
 #!/bin/bash
@@ -33,25 +48,27 @@ Because there are many other shells, it is often good practice to add a "shebang
 echo "Hello, world!"
 ```
 
-Instead of writing `bash test`, you can also mark your script as executable and then run it directly:
+Shebangs are a good idea, because often scripts are executed not via `sh` or `bash` but by marking them as executable and then simply specifying the path:
 
 ```sh
-chmod u+x test
-./test
+chmod u+x example.sh
+./example.sh
 ```
 
-This will again print `Hello, world!`.
+The shebang will make sure that the script will be executed by the correct shell.
 
 ## Variables
 
-You declare a variable using `variable=value` and use the variable by prefixing it with `$`.
-For example:
+You declare a variable using the `variable=value` notation.
+You can then use the variable by prefixing it with the `$` character.
+
+Unlike most other programming languages, `sh` doesn't really have the concept of a data type.
+All variables are strings, but, depending on the context, you can do arithmetic operations and comparisons with variables.
+Basically, if a variable contains only digits, it can be treated as a number.
+
+Consider this example:
 
 ```sh
-# You can assign a number to a variable
-number=1
-echo $number
-
 # You can assign a string to a variable.
 # If the string contains no whitespaces, you don't need
 # to put it in quotes, although it's usually recommended to do so.
@@ -64,6 +81,24 @@ echo $short_username_2
 long_username="John Doe"
 echo $long_username
 
+# The number variable is still a string, but you can do numeric operations on it,
+# as we will see later
+number=1
+echo $number
+```
+
+This will output the following:
+
+```
+John
+John
+John Doe
+1
+```
+
+You can use variables inside strings like this:
+
+```sh
 # You can use a variable in a string if you prefix it with $
 echo "Hello, $short_username"
 
@@ -72,13 +107,9 @@ echo "Hello, $short_username"
 echo "Hello, ${short_username}1"
 ```
 
-This will print the following:
+This will output the following:
 
 ```
-1
-John
-John
-John Doe
 Hello, John
 Hello, John1
 ```
@@ -89,19 +120,27 @@ An extremely common error that beginners make is adding spaces in assignments:
 username = "John"
 ```
 
-This doesn't work and will result in the following error:
+This doesn't work and will result in an error:
 
 ```sh
-./test: line 1: username: command not found
+./example.sh: line 1: username: command not found
 ```
 
 ## Command Substitution
 
-TODO
+You can use the output of a command in your script via the **command substitution** mechanism.
+The syntax for this is `$(command)`.
+
+For example, here is how you can store the output of `ls` in the variable `ls_output`:
+
+```sh
+ls_output=$(ls)
+echo $ls_output
+```
 
 ## Arithmetic
 
-The shell supports the usual operators `+`, `-`, `*`, `/`, `%` (modulo) and `**` (exponentiation).
+The shell supports the usual arithmetic operators `+`, `-`, `*`, `/`, `%` (modulo) and `**` (exponentiation).
 
 You can perform arithmetic expansion using the `$((expression))` notation:
 
@@ -116,7 +155,7 @@ echo $((5 ** 2)) # 25
 
 Note that division is truncated to integers and arithmetic expansion only supports integers.
 
-This will result in a syntax error:
+For example, trying to do this will result in a syntax error:
 
 ```sh
 echo $((5.2))
@@ -124,7 +163,12 @@ echo $((5.2))
 
 ## Functions
 
-Just like most other programming languages, sh supports functions.
+Just like most other programming languages, `sh` supports functions.
+
+However, you should not think about shell functions the same way you would think about e.g. Python or TypeScript functions.
+Instead, you should think of shell functions as kind of "mini-scripts" (or "mini-commands").
+This is because `sh` functions have peculiar syntax when you want to pass arguments or return a value.
+
 You can define a function like this:
 
 ```sh
@@ -147,6 +191,18 @@ greet
 
 This will output `Hello, world!`.
 
+Note that you can also define a function like this:
+
+```sh
+function greet {
+    echo "Hello, world!"
+
+greet
+}
+```
+
+However, this is a `bash` extension and not POSIX-compliant.
+
 If you need to pass parameters to a function, you don't write `greet(arg1, arg2)`.
 Instead, arguments passed to a function can be accessed using `$1`, `$2` etc:
 
@@ -164,7 +220,7 @@ Here is an example with multiple parameters:
 
 ```sh
 add() {
-    sum=$(( $1 + $2 + $3 ))
+    sum=$(($1 + $2 + $3))
     echo "Sum is: $sum"
 }
 
@@ -172,7 +228,7 @@ add() {
 add 5 10 15
 ```
 
-If you want return a value from a function, you typically echo it and then capture the output via command substitution:
+If you want return a value from a function, you can `echo` it and then capture the output via command substitution:
 
 ```sh
 greet() {
@@ -183,10 +239,9 @@ greeting=$(greet)
 echo $greeting
 ```
 
-Generally, don't think of shell functions the same way you would think about e.g. Python or TypeScript functions.
-Instead, you should think of shell functions as kind of "mini-scripts".
+> Note that there is also the `return` keyword which allows you to exit a function with a status code.
 
-An important point with `sh` is that all variables are globaly by default, even if they're created in a function body:
+An important point with `bash` specifically is that variables are global by default, even if they're created in a function body:
 
 ```sh
 fun() {
@@ -203,7 +258,7 @@ fun
 echo "Outside body: $x"
 ```
 
-If you want to create a local variable, you need to explicitly use the `local` keyword:
+If you want to create a local variable in `bash`, you need to explicitly use the `local` keyword:
 
 ```sh
 fun() {
@@ -221,7 +276,7 @@ echo "Outside body: $x"
 
 ## Conditionals
 
-You can use `if`, `elif` and `else`:
+You can use the `if`, `elif` and `else` keywords for conditional behaviour:
 
 ```sh
 if [ condition1 ]; then
