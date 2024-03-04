@@ -269,6 +269,8 @@ echo $greeting
 An important point with `bash` and most other `sh` dialects is that variables are global by default, even if they're created in a function body:
 
 ```sh
+#!/bin/bash
+
 fun() {
     # Create a variable in function body
 	x=42
@@ -286,6 +288,8 @@ echo "Outside body: $x"
 If you want to create a local variable in `bash`, you need to explicitly use the `local` keyword:
 
 ```sh
+#!/bin/bash
+
 fun() {
     # Create a variable in function body
 	local x=42
@@ -350,6 +354,8 @@ You can also use the `-a` (and), `-o` (or) and the `!` (not) operators to combin
 For example:
 
 ```sh
+#!/bin/bash
+
 user="admin"
 logged_in="true"
 
@@ -363,6 +369,8 @@ You can write `[[ ]]` instead of `[ ]` to allow for operators like `&&` (and), `
 For example, the previous example could be writen like this in Bash:
 
 ```sh
+#!/bin/bash
+
 user="admin"
 logged_in="true"
 
@@ -447,6 +455,8 @@ done
 You can use the `break` keyword to exit from a loop:
 
 ```sh
+#!/bin/bash
+
 count=1
 while [ $count -le 5 ]; do
     echo $count
@@ -460,6 +470,8 @@ done
 You can the `continue` keyword to skip the rest of the current loop iteration and continue with the next iteration:
 
 ```sh
+#!/bin/bash
+
 count=0
 while [ $count -lt 5 ]; do
     echo $count
@@ -472,23 +484,26 @@ done
 
 ## Stdin, Stdout and Stderr
 
-Programs usually send results to **stdout** and errors to **stderr** and take input from **stdin**.
-They are internaly referenced as 0 (stdin), 1 (stdout), 2 (stderr).
+In Linux, the standard way programs communicate with their environment is through the three data stream called **stdin** (short for standard input), **stdout** (short for standard output) and **stderr** (short for standard error).
 
-For example, the output of `echo` is sent to `stdout` by default:
+Specifically, they send results to stdout and errors to stderr, while reading input from stdin.
+Internally, these streams are referenced by the file descriptor numbers `0` (stdin), `1` (stdout), `2` (stderr).
+
+For example, when your program "writes something to the console", it actually sends data to `stdout`:
 
 ```sh
 echo "This is sent to stdout"
 ```
 
-You can read user input from `stdin` by using the `read` command:
+When your program "reads user input", it actually reads input from `stdin`:
 
 ```sh
-read -p "Enter a value: " input
+read -p "Read a value from stdin: " input
 echo $input
 ```
 
-You can use I/O redirection to redirect where stdout goes with `>` or `>>`.
+You can use **I/O redirection** to redirect a stream by using the `>`, `>>` and `<` operators.
+
 For example, you can redirect stdout to a file like this:
 
 ```sh
@@ -512,21 +527,21 @@ Second line
 Now consider this example:
 
 ```sh
-echo "This first line will be overwritten" >> example.txt
+echo "This first line will not be overwritten" >> example.txt
 echo "Second line" >> example.txt
 ```
 
 The resulting file will look like this:
 
 ```
-This first line will be overwritten
+This first line will not be overwritten
 Second line
 ```
 
 We can also use `>` to redirect `stdout` to `stderr` via the `1>&2` notation.
 For example, here is how we can write something to `stderr`:
 
-```
+```sh
 echo "This will be written to stderr" 1>&2
 ```
 
@@ -580,19 +595,58 @@ You can use the `|` operator to pass the output of `generate.sh` to `square.sh`:
 ./generate.sh | ./square.sh
 ```
 
+This will output:
+
+```
+1
+4
+9
+16
+25
+```
+
 ## Environment Variables
 
 Environment variables are special variables that are defined outside your script.
 They are part of the environment in which the script runs.
 These variables contain information related to the system or user environment.
 
-For example the `USER` environment variable contains the current user and `HOME` the home directory of the current user:
+For example, the `USER` environment variable contains the current user and `HOME` the home directory of the current user:
 
 ```sh
 echo $USER
 echo $HOME
 ```
 
+The `SHELL` environment variable contains the path to the current shell:
+
+```sh
+# Outputs /bin/bash if you're using bash
+echo $SHELL
+```
+
+One particularly important environment variable is the `$PATH` variable.
+This specifies the directories that the shell traverses when looking for executable files when you enter a command.
+
+The directories are separated by colons.
+For example, `$PATH` might be `/bin:/usr/bin:/home/username/.local/bin`.
+In this case, the shell would look for files in `/bin`, `/usr/bin` and `/home/username/.local/bin`.
+This means that if you have file `/usr/bin/thingy` and you type `thingy` in your command line, the shell will be able to locate and execute that file.
+
+You can also set your own environment variables temporarily using the `export` command:
+
+```sh
+export VAR_NAME=varvalue
+```
+
+The variable will be set for the duration of the session (e.g. if you close the terminal, it will be lost).
+You scripts will be able to access the variable `VAR_NAME`.
+
 You can use `printenv` to print the currently set environment variables.
 
 ## Should you use `bash`?
+
+Since `bash` is theoretically not POSIX-compliant, there a some people that advocate against using bash (at least the non-compliant features).
+
+However, these days `bash` is available on practically any useful Linux distribution.
+In our opinion, you should absolutely use `bash` (including the non-compliant features) unless you really have to support some ancient Linux distribution.
