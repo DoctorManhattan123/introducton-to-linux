@@ -2,12 +2,16 @@
 
 ## Hello, World
 
-So far we only executed simple commands in the terminal.
-For more complex scenarios, we might want execute a sequence of commands after each other, chain commands together, repeat commands or maybe even execute commands conditionally.
+So far we only executed straightforward commands in the terminal.
+This is enough for simple cases, but not for more intricate scenarios.
+
+For example, we might want execute a sequence of commands after each other, chain commands together, repeat commands or maybe even execute commands conditionally.
 
 We can achieve this by writing **shell scripts**.
+These are similar to scripts written in other programming languages (like Python or JavaScript).
+You write a bunch of code, which you can then execute to accomplish some task.
 
-Let's create a very simple example script `example.sh` with the following content:
+To see how this works, let's create a very simple example script `example.sh` with the following content:
 
 ```sh
 echo "Hello, world!"
@@ -21,18 +25,21 @@ sh test.sh
 
 This will output `Hello, world!` to the terminal.
 
+> Note that the word "shell" is used both to describe the terminal as well as a programming language that can be used to write a shell script.
+
 ## Choosing Your Flavour
 
 The are many different shells available for Linux - `sh`, `bash`, `ksh`, `csh` and `fish` are just a few examples.
 
 We will primarily focus on `sh` and `bash`.
 The `sh` shell is an older shell whose features later became standardized in the so called **POSIX standard**.
-The `bash` shell is a newer shell that implements all `sh` features and has some additional functionality.
-We will primarily talk about the `sh` compliant parts of bash.
-If some `bash` feature is not compatible with `sh` we will explicitly mention it.
+The `bash` shell is a newer shell that implements all features of `sh` and has some additional functionality on top of that.
+
+We will primarily talk about the POSIX-compliant parts of bash.
+If some `bash` feature is not POSIX-compliant we will explicitly mention it.
 
 Because there are many different shells, it is often good practice to add a **shebang** on top of your shell to specify how your script should be executed.
-For example if we want to execute our script with `sh` we would specify the location of `bash` as the shebang:
+For example if we want to execute our script with `sh` we would specify the location of `sh` as the shebang:
 
 ```sh
 #!/bin/sh
@@ -55,20 +62,22 @@ chmod u+x example.sh
 ./example.sh
 ```
 
-The shebang will make sure that the script will be executed by the correct shell.
+The shebang will make sure that the script will be executed by the correct interpreter.
 
 ## Variables
 
-You declare a variable using the `variable=value` notation.
+Variables are declared using the `variable=value` notation.
 You can then use the variable by prefixing it with the `$` character.
 
 Unlike most other programming languages, `sh` doesn't really have the concept of a data type.
-All variables are strings, but, depending on the context, you can do arithmetic operations and comparisons with variables.
+All variables are strings, but, depending on the context, you can do arithmetic operations and comparisons.
 Basically, if a variable contains only digits, it can be treated as a number.
 
-Consider this example:
+Consider this example script:
 
 ```sh
+#!/bin/bash
+
 # You can assign a string to a variable.
 # If the string contains no whitespaces, you don't need
 # to put it in quotes, although it's usually recommended to do so.
@@ -126,12 +135,28 @@ This doesn't work and will result in an error:
 ./example.sh: line 1: username: command not found
 ```
 
+It's important to understand that the shell is _extremely permissive_.
+All variables that don't exist at the time of usage will be automatically created.
+
+This can lead to problems.
+For example, if you mistype a variable, you won't get an error.
+Instead, the shell will silently create a new variable:
+
+```sh
+#!/bin/bash
+
+username="John Doe"
+
+# This will output an empty string
+echo $usernam
+```
+
 ## Command Substitution
 
 You can use the output of a command in your script via the **command substitution** mechanism.
 The syntax for this is `$(command)`.
 
-For example, here is how you can store the output of `ls` in the variable `ls_output`:
+For example, here is how you can store the output of `ls` in a variable `ls_output`:
 
 ```sh
 ls_output=$(ls)
@@ -165,9 +190,9 @@ echo $((5.2))
 
 Just like most other programming languages, `sh` supports functions.
 
-However, you should not think about shell functions the same way you would think about e.g. Python or TypeScript functions.
+However, you should not think about shell functions the same way you would think about e.g. Python or JavaScript functions.
 Instead, you should think of shell functions as kind of "mini-scripts" (or "mini-commands").
-This is because `sh` functions have peculiar syntax when you want to pass arguments or return a value.
+This is also why `sh` functions have a peculiar syntax for passing arguments or returning values.
 
 You can define a function like this:
 
@@ -177,7 +202,7 @@ function_name() {
 }
 ```
 
-You can the call the function by simply writing `function_name` (just like you would call a command).
+You can the call the function by simply writing `function_name` (just like you would call a regular command).
 
 For example:
 
@@ -191,7 +216,7 @@ greet
 
 This will output `Hello, world!`.
 
-Note that you can also define a function like this:
+You can also define a function like this:
 
 ```sh
 function greet {
@@ -201,7 +226,7 @@ greet
 }
 ```
 
-However, this is a `bash` extension and not POSIX-compliant.
+> This is a `bash` extension and not POSIX-compliant.
 
 If you need to pass parameters to a function, you don't write `greet(arg1, arg2)`.
 Instead, arguments passed to a function can be accessed using `$1`, `$2` etc:
@@ -241,7 +266,7 @@ echo $greeting
 
 > Note that there is also the `return` keyword which allows you to exit a function with a status code.
 
-An important point with `bash` specifically is that variables are global by default, even if they're created in a function body:
+An important point with `bash` and most other `sh` dialects is that variables are global by default, even if they're created in a function body:
 
 ```sh
 fun() {
@@ -270,7 +295,7 @@ fun() {
 # Call the function
 fun
 
-# This will output an empty string
+# Here $x will be an empty string
 echo "Outside body: $x"
 ```
 
@@ -321,7 +346,7 @@ else
 fi
 ```
 
-You can also use `-a` (and), `-o` (or) and the `!` (not) operators to combine conditions.
+You can also use the `-a` (and), `-o` (or) and the `!` (not) operators to combine conditions.
 For example:
 
 ```sh
@@ -334,21 +359,58 @@ fi
 ```
 
 Bash introduces additional syntax that looks more like conditionals in other programming languages.
-You can write `[[ ]]` instead of `[ ]` to allow for operators like `&&` (and), `||` (or) and `==` (same as `=`).
+You can write `[[ ]]` instead of `[ ]` to allow for operators like `&&` (and), `||` (or) and `==` (similar to `=` with additional pattern matching features).
 For example, the previous example could be writen like this in Bash:
 
 ```sh
 user="admin"
 logged_in="true"
 
-if [[ $user = "admin" && $logged_in = "true" ]]; then
+if [[ $user == "admin" && $logged_in == "true" ]]; then
     echo "Welcome, admin!"
 fi
 ```
 
+This syntax looks much more similar to other programming languages.
+
 ## Loops
 
-The shell supports most of the familiar loops.
+The shell supports most of the familiar loops like `while` and `for`.
+
+A `while` loop constantly checks whether a condition is met.
+If the condition isn't met, the while loop terminates.
+
+The general syntax for a `while` loop looks like this:
+
+```sh
+while [ condition ]; do
+    # commands to execute
+done
+```
+
+For example:
+
+```sh
+count=1
+while [ $count -le 5 ]; do
+    echo $count
+    count=$((count + 1))
+done
+```
+
+A shell-specific loop is the `until` loop which is kind of the opposite of the `while` loop.
+An `while` loop continues until a condition _is no longer true_.
+The `until` loop continues until a condition _is true_.
+
+Here is how we could rewrite the example using an `until` loop:
+
+```sh
+count=1
+until [ $count -gt 5 ]; do
+    echo $count
+    count=$((count + 1))
+done
+```
 
 The general syntax for a `for` loop looks like this:
 
@@ -366,20 +428,44 @@ for i in 1 2 3; do
 done
 ```
 
-The general syntax for a `while` loop looks like this:
+Here is how you could use a `for` loop to iterate over the current files in a directory:
 
 ```sh
-while [ condition ]; do
-    # commands to execute
+for file in $(ls); do
+    echo "$file"
 done
 ```
 
-For example:
+You could also iterate over the lines in a file:
+
+```sh
+for word in $(cat filename); do
+    echo "$word"
+done
+```
+
+You can use the `break` keyword to exit from a loop:
 
 ```sh
 count=1
 while [ $count -le 5 ]; do
     echo $count
+    if [ $count -eq 3 ]; then
+        break # Exit the loop when count equals 3
+    fi
+    count=$((count + 1))
+done
+```
+
+You can the `continue` keyword to skip the rest of the current loop iteration and continue with the next iteration:
+
+```sh
+count=0
+while [ $count -lt 5 ]; do
+    echo $count
+    if [ $count -eq 3 ]; then
+        continue # Skip the rest of the loop when count equals 3
+    fi
     count=$((count + 1))
 done
 ```
@@ -508,3 +594,5 @@ echo $HOME
 ```
 
 You can use `printenv` to print the currently set environment variables.
+
+## Should you use `bash`?
