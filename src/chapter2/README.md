@@ -81,7 +81,7 @@ $ pwd
 /home/me
 ```
 
-When we first log in to our system (or start a terminal), out current working directory will be our `home directory`.
+When we first log in to our system (or start a terminal), our current working directory will be our `home directory`.
 Each user account has its own working directory.
 
 ### Change the Current Working Directory
@@ -97,7 +97,7 @@ There are two types of pathways:
 #### Absolute Pathnames
 
 An absolute pathname begins with the root directory and follows the tree branch by branch until the path to the desired directory is completed.
-For example there is a directory on our where most of our systems programs are installed. The pathname to this directory is `/usr/bin`.
+For example, there is a directory on our machine where most of our systems programs are installed. The pathname to this directory is `/usr/bin`.
 This means that the root directory contains a directory called `usr` and this directory has a directory called `bin`.
 
 ```sh
@@ -108,11 +108,12 @@ $ ls
 ... a lot of files...
 ```
 
-In most of the terminals you will see that the shell prompt changed. As a convenience, usually displays the current working directory.
+In most of the terminals you will see that the shell prompt changed. This is just a convenience, so the user knows where he is located.
+It is essentially the same as running the `pwd` command from before.
 
 #### Relative Pathnames
 
-In contrary to absolute pathnames which always start at the root directory relative pathnames start from the current working directory.
+In contrary to absolute pathnames which always start at the root directory, relative pathnames start from the current working directory.
 To show that the current pathname should be a relative path, you can use two kinds of special notations:
 
 * `.` - refers the the current working directory
@@ -148,13 +149,14 @@ $ pwd
 /usr/bin
 ```
 
-> Note: You can omit the `./` at the beginning, if we do not specify the `/` for the root directory, it will be assumed that the path we give is a relative pathl.
+> Note: You can omit the `./` at the beginning. If we do not specify the `/` for the root directory, 
+it will be assumed that the path we input is a relative path.
 
 #### Filenames
 
 Facts about file names:
 
-* Filenames the begin with a period character are hidden, this means that when using the `ls` command, they will not be displayed.
+* Filenames that begin with a period character are hidden, this means that when using the `ls` command, they will not be displayed.
 To list them you have to use the command with `-a` argument (`ls -a`).
 > Note: originally the existence of hidden files was a [bug](https://tookmund.com/2022/03/rob-pike-shortcuts)
 * Filenames and commands are case-sensitive, meaning that `File1` and `file1` are two different files
@@ -232,21 +234,21 @@ Be cautious with this command, as it permanently deletes files and directories.
 
 9. **find Command (Search for Files/Directories)**:
 
-The find command is used to search for files and directories based on different criteria.
-To find a file by name, type find `/path/to/search/ -name "filename.txt"` and press Enter.
+The `find` command is used to search for files and directories based on different criteria.
+To find a file by name, type `find /path/to/search/ -name "filename.txt"` and press Enter.
 You can also search based on file type, size, modification date, and more.
 
 10. **`grep` Command (Search Within Files)**:
 
-The grep command is used to search for specific text within files.
-To search for a particular word or phrase in a file, type grep "search term" filename.txt and press Enter.
-grep can also be used with options for case-insensitive search, searching recursively in directories, displaying line numbers, and more.
+The `grep` command is used to search for specific text within files.
+To search for a particular word or phrase in a file, type `grep "search term" filename.txt` and press Enter.
+`grep` can also be used with options for case-insensitive search, searching recursively in directories, displaying line numbers, and more.
 
 11. **`locate` Command (Find Files by Name)**:
 
-The locate command is used to quickly find the location of files and directories by their names.
+The `locate` command is used to quickly find the location of files and directories by their names.
 To find a file, type locate filename.txt and press Enter. It will display paths of all files and directories with "filename.txt" in their names.
-The locate command relies on a database that is periodically updated by the system; to update this database manually, you can use the sudo updatedb command.
+The locate command relies on a database that is periodically updated by the system; to update this database manually, you can use the `sudo updatedb` command.
 
 Not it is time to practice and do it yourself. Perform the following instructions by using the commands
 you just learned. You can check the correctness of the current step by just viewing the contents
@@ -340,7 +342,7 @@ The -r option tells rm to delete directories and their contents recursively, and
 Even your boot loader or files that are crucial for your OS to work properly. In general be careful with wildcard usage and if you are new to Linux, use something like `trash-cli`, to avoid deleting data forever.
 
 > The usage of this command is not a joke, real companies went down due to wrong usage of this command 
-Read this [artice](`https://www.independent.co.uk/tech/man-accidentally-deletes-his-entire-company-with-one-line-of-bad-code-a6984257.html`)
+Read this [article](https://www.independent.co.uk/tech/man-accidentally-deletes-his-entire-company-with-one-line-of-bad-code-a6984256.html)
 
 _I am not kidding, read this article fully, and try not to use this command_
 
@@ -525,12 +527,11 @@ the most important directories and files, but we recommend to also skip through 
   (e.g. cat, cp, echo, and many more that you will also learn in the later chapters of this book).
 - `/boot` - this directory contains the static files for the boot loader. _I would really recommend
   you not deleting this directory_
-- `/dev` - holds special files or device files, TODO: example
+- `/dev` - holds special files or device files
 - `/etc` - contains host-specific system configuration files. Configuration files are local
   files that are used to control the operation of a program. They have to be static and cannot
   be an executable binary.
 - `/home` - contains the users home directory, this is where you will be spending most of your time
-  as this is where your data like downloads, files in general are located
 - `/lib` - holds shares library images needed to boot the system and run the commands in the
   root file system, e.g. by binaries in `/bin` and `/sbin`
 - `/media` - contains subdirectories which are used as mount points for removable media devices
@@ -539,7 +540,7 @@ the most important directories and files, but we recommend to also skip through 
   directory is a local issue and should not affect the manner in which any program is run.
   You should not use this directory for installation programs
 - `/opt` - is reserved for add-on application software packages
-- `/root` - home directory for the root user. This location is the recommend default location
+- `/root` - home directory for the root user. This location is the recommended default location
   for the root account's home directory and can be determined by the developer
 - `/run` - this directory contains system information data describing the system since it was
   booted. Those files must be cleared at the beginning of the boot process
@@ -571,7 +572,7 @@ Large software packages must not use a direct subdirectory under the `/usr` hier
 - `/usr/sbin` - contains any non-essential binaries used exlusively by the system administrator.
 
 There are many more, but subdirectories in the `/usr` directory, but they are no essential to understand. If you
-want to have more information, you can explore it (here)[https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch04.html].
+want to have more information, you can explore it [here](https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch04.html).
 
 #### The `/var` Hierarchy
 
@@ -585,11 +586,12 @@ This section might have seem dull, but knowing this, or at least understanding w
 extremely when developing, understanding the concept of the things that come later and helps you debug problems, that you
 would otherwise never be able to debug.
 
-> That said, if you do not know what you are doing, you should NOT edit or even remove directories or files located in these
-> directories. _It seems pretty obvious, that you should remove the `/boot` or `/bin`._
+> That said, if you do not know what you are doing, you should NOT edit or remove directories or files located in these
+> directories. _It seems pretty obvious, that you should not remove the `/boot` or `/bin` or any other directories inside the `/` directory._
 
 Moreover you can also only edit those files when being the root user. Are you interested in what the root user is?
 
-_Then stay tuned for the next season of `Introduction to Linux`._ No really, in the next chapter, we will discuss users and groups,
-which is how unix-like systems manage permissions for different users. So that not every user, can just delete you `/boot` directory
-and kill your whole system.
+_Then stay tuned for the next season of `Introduction to Linux`._ 
+
+In the next chapter, we will discuss users and groups, which is how unix-like systems manage permissions for different users. 
+So that not every user, can just delete you `/boot` directory and kill your whole system.

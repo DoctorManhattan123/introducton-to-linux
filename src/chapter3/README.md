@@ -15,7 +15,7 @@ personal files and settings are kept private.
 
 **Groups**
 
-A group as a collection of users. Each group has a unique identifier called the group id (gid).
+A group is a collection of users. Each group has a unique identifier called the group id (gid).
 Groups simplify permission management. Instead of assigning permissions to each user individually,
 you can assign the permission to a group and each user of this group has this permission.
 
@@ -114,11 +114,11 @@ $ ls -la permissions.txt
 The same principle applies to directories, although the `rwx` means slightly different things. You use
 this definitions if the first bit is `d` (so it is a directory) instead of `-`.
 
-- r - allows the contents of the directory to be lsted if the x attribute is also set
+- r - allows the contents of the directory to be listed (e.g. via `ls`) if the x attribute is also set
 - w - allow files within the directory to be created, deleted, or renamed if the x attribute is also set
 - x - allows a directory to be entered (e.g. cd dir)
 
-Lets create a folder and put a file in there and list the permissions of the folder:
+Let's create a folder and put a file in there and list the permissions of the folder:
 
 ```sh
 $ mkdir permissions-folder
@@ -131,7 +131,7 @@ drwx------ 70 alex alex 4096 Jan 30 08:55 ../
 -rw-r--r--  1 alex alex    0 Jan 30 08:56 example.txt
 ```
 
-Now this looks a bit different from before. The the outer rigth column, you can see the names of the
+Now this looks a bit different from before. At the outer right column, you can see the names of the
 file/directories inside the directory. You see the `example.txt` file, but what are the other two?
 
 - `./` - points to the current directory, try it out (first `cd` into the `permissions-folder`):
@@ -175,12 +175,16 @@ Important commands:
 Now after unstanding file permissions, and as _everything is a file_, most of the permissions are
 managed exactly this way, we will look at how to manage users.
 
-First lets see which user you are. With the `whoami` command, you can see the current user.
+First let's see which user you are. With the `whoami` command, you can see the current user.
 
 ```sh
 > whoami
 username
 ```
+
+You will probably see your name here, for example when I execute this command, I get `alex`.
+
+#### Sudo
 
 > For a lot of the following operations we will need root priviliges as adding users and setting
 > passwords is a very powerful operation, therefore only users with root priviliges are able to
@@ -193,9 +197,12 @@ $ sudo ls -la
 
 This will prompt you to input your password to authenticate, that you are the real user.
 
-You will probably see you name here, for example when I executed this command, I got `alex`.
+If the you try to execute a command which needs root previlige and you do not run it with `sudo` or as
+a user with root previlige, then you will get a `Permission denied` error.
 
-Now lets add a user:
+### User Management
+
+Now lets try to add a user:
 
 ```sh
 $ useradd -m exampleuser
@@ -203,7 +210,7 @@ useradd: Permission denied.
 useradd: cannot lock /etc/passwd; try again later.
 ```
 
-Well, you already know how to fix this, _Try fixing it yourself_
+Well, you already know how to fix this. _Try fixing it yourself_
 
 ```sh
 $ sudo useradd -m exampleuser
@@ -261,18 +268,6 @@ The exact groups will of course depend on your current setup, but lets explain s
   commands with root permission. _And yes, with this, you will be able to delete the `/boot` directory_.
   **Please DO NOT do this, for your own sake**.
 
-> To execute a command via root user, you just prepend the command you want to execute with `sudo`. For example:
-
-```sh
-sudo ls -la
-```
-
-If the you try to execute a command which needs root previlige and you do not run it with `sudo` or as
-a user with root previlige, then you will get a `Permission denied` error.
-
-You will most likely be asked to input your password, as not everyone should be able to execute commands
-with root privilige.
-
 - input - gives you access to input devices like keyboard, mice and other human interfaces
 - power - gives you access to power related commnands
 - storage - might give you permission to mount or unmount
@@ -302,14 +297,14 @@ You can also list all groups, currently present in the system:
 cat /etc/group/
 ```
 
-Lets create a new group and add the user to the group
+Let's create a new group and add the user to the group
 
 ```sh
 $ sudo groupadd examplegroup
 $ sudo gpasswd -a alex examplegroup # gpasswd -a <user> <group>
 ```
 
-> For this changes to take effect, you need to logout and login again
+> For these changes to take effect, you need to logout and login again
 
 You can also rename groups:
 
