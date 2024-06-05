@@ -137,4 +137,48 @@ YOu can use `apt search $KEYWORD` to search for packages and `apt show $PACKAGE_
 
 ### Managing PPAs
 
+Personal Package Archives (PPA) allow you to upload Ubuntu source packages to be built and published as an apt repository by Launchpad.
+They basically provide a way for individual developers to distribute software to users in an easy way.
+
+You can add a PPA like this:
+
+```sh
+sudo add-apt-repository ppa:$PPA_NAME
+sudo update
+```
+
+You can then install packages from PPA by simply running the `apt install` command.
+
+You can remove a PPA like this:
+
+```sh
+sudo add-apt-repository --remove ppa:$PPA_NAME
+```
+
 ## The `dpkg` Tool
+
+The `dpkg` tool is the backend of `apt` and does the low-level operations.
+
+You can install a package like this:
+
+```sh
+sudo dpkg -i $PACKAGE_NAME.deb
+```
+
+You can remove a package like this:
+
+```sh
+sudo dpkg -r $PACKAGE_NAME.deb
+```
+
+You can purge a package like this:
+
+```sh
+sudo dpkg --purge $PACKAGE_NAME.deb
+```
+
+You can list installed packages like this:
+
+```sh
+dpkg -i
+```
