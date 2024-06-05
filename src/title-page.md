@@ -1,3 +1,3 @@
 # Introduction to Linux
 
-_by Mikhail Berkov and by Alexander Berkov_
+_by Mikhail Berkov, Alexander Berkov_
