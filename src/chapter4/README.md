@@ -29,11 +29,11 @@ You can also show an interactive view of processes by executing the `top` comman
 
 A process can launch another process.
 We say that a **parent process** launches a **child process**.
-This is in fact the main mechanism by which new processes are created.
+This is, in fact, the main mechanism by which new processes are created.
 
 The way this works is that after the kernel has booted, an initial process is created.
-This process spawns new processes, which can in turn spawn new processes etc.
-Basically the processes form a giant tree, with the initial process as the root of that tree.
+This process spawns new processes, which in turn can spawn new processes etc.
+Basically, the processes form a giant tree, with the initial process as the root of that tree.
 
 Note that it is possible to have multiple initial processes, in which case you will have multiple process trees.
 
@@ -45,7 +45,7 @@ You can see the PIDs in the output of `ps -ef`.
 Each process also has a **PPID** (parent process ID) which is simply the PID of its parent.
 
 You can use the `-p` flag to get information about a process with a specific PID.
-For example here is how you list information about the process with PID `1`:
+For example, here is how you list information about the process with PID `1`:
 
 ```sh
 ps -f -p 1
@@ -95,10 +95,10 @@ Child process running
 ...
 ```
 
-> Of course your PIDs and PPIDs will be different.
+> Of course, your PIDs and PPIDs will be different.
 
 The parent process (`python parent.py`) with PID `148411` has created a child process (`python child.py`).
-That child process has a completely new PID `148469`, however its PPID is the ID of the parent process, i.e. `148411`.
+That child process has a completely new PID `148469`, however, its PPID is the ID of the parent process, i.e. `148411`.
 
 You can observe this with the `ps` command:
 
@@ -124,12 +124,12 @@ Basically, processes that are in the running state are actively doing some work 
 A process is sleeping if it's waiting for something to happen (like an event or it's waiting for some time to pass).
 During this time, a process is not executing any code.
 
-The most common type of sleep is the **interruptible sleep** can be interrupted by signals (we will talk about them below).
-However, there is also the **uninterruptible sleep**, which is a special sleep mode in which a process can't be interrupted by a signal.
+The most common type of sleep is the **interruptible sleep** which can be interrupted by signals (we will talk about them below).
+However, there is also the **uninterruptible sleep** state, which is a special sleep mode where a process cannot be interrupted by a signal.
 
-A process can also be in the stopped state, which is rather self explanatory.
+A process can also be in the stopped state, which is rather self-explanatory.
 Usually, a process is stopped because it has received a signal.
-Note that a process tha was stopped can be restarted where it left off.
+Note that a process that was stopped can be restarted where it left off.
 
 Here is a Python script `proc.py` that cycles through the states:
 
@@ -160,14 +160,14 @@ Execute the script by running `python proc.py`.
 The script will print a PID - now run `watch proc -f $PID`.
 
 While the process is calculating the number `k`, you will see an `R+` in the status column - `R` is short for "running".
-This makes sense, because the process is actively using the CPU for number crunching.
+This makes sense because the process is actively using the CPU for number crunching.
 
-When the `time.sleep` is called, the status column will show an `S+` in the status column - `S` is short for "sleeping".
+When the `time.sleep` is called, the status column will show an `S+` - where `S` stands for "sleeping".
 This also makes sense, because the process is waiting for the timer to complete and is not actively executing any code.
 
 Finally, once the process receives the SIGTSTP signal, the status column will show a `T` - `T` is short for "stopped".
 
-> There are more states a process can be in (like "zombie"), but these are out of scope for this book.
+> There are more states a process can be in (like "zombie"), but these are out of the scope of this book.
 
 ## Signals
 
@@ -216,10 +216,10 @@ while True:
 
 If you try to press `^C` now, the process will just print the message and keep running.
 
-> If you press `^C` and a process doesn't die, that means that it has registered a signal handler.
-> So keep in mind that `^C` doesn't actually necessarily kill a process in all cases.
+> If you press `^C` and a process does not die, it means that it has registered a signal handler.
+> So keep in mind that `^C` does not actually necessarily kill a process in all cases.
 
-You can also sending a SIGINT by executing `kill -SIGINT $PID`.
+You can also send a SIGINT by executing `kill -SIGINT $PID`.
 
 The **SIGTERM** (signal terminate) "politely" tells a process to die for good.
 This signal can be caught and ignored by the process (hence the "polite").
@@ -246,17 +246,17 @@ while True:
 ```
 
 The difference between SIGINT and SIGTERM is a bit philosophical.
-A SIGINT is usually an signal from a user requesting immediate interruption, while SIGTERM is usually a termination request by a system service (or script).
+A SIGINT is usually a signal from a user requesting immediate interruption, while SIGTERM is usually a termination request by a system service (or script).
 
 If you are a regular user and you need to interrupt a process, you should send a SIGINT by pressing `^C`.
 If you write a system script that needs to terminate certain processes, you should send a SIGTERM.
 
 Note that the fact that a process can catch a SIGINT or SIGTERM is not a bug, but a feature.
-For example a process might choose to perform some cleanup upon receiving a SIGINT (or SIGTERM), which is often a good idea.
+For example, a process might choose to perform some cleanup upon receiving a SIGINT (or SIGTERM), which is often a good idea.
 
 The **SIGKILL** (signal kill) is the "impolite" version of a SIGTERM.
-This signal can't be caught by the process.
-This means that process will be terminated immediately (by the operating system).
+This signal cannot be caught by the process.
+This means that the process will be terminated immediately (by the operating system).
 
 You should send a SIGKILL as a last resort if the process ignores your more polite requests to die.
 You can send a SIGKILL using e.g. `kill -SIGKILL $PID`.
@@ -358,7 +358,7 @@ If you simply run the normal command `python example.py`, this will create a **f
 This is a process that is connected to a terminal.
 
 This means that the user can interact with the process (e.g. input some data or send a SIGINT).
-Foreground processes also take control of the terminal, i.e. you can't use the terminal for anything else while the process is running.
+Foreground processes also take control of the terminal, i.e. you cannot use the terminal for anything else while the process is running.
 
 You can create a **background process** by adding a `&` to the end of the command.
 For example:
@@ -368,7 +368,7 @@ python example.py &
 ```
 
 Notice that you can now interact with the terminal normally, but you will still see the output.
-You can no longer interact with the process however, for example pressing `^C` will no longer send a SIGINT.
+You can no longer interact with the process however, for example, pressing `^C` will no longer send a SIGINT.
 
 You can execute the `jobs` command to see the status of background processes that are currently running.
 
@@ -397,7 +397,7 @@ nohup python proc.py &
 
 You can now do anything you want in your terminal and even close it - the process will just keep running along.
 
-Doing this is the simplest way to start e.g. a long running web server - just `nohup` it and sends the process to the background.
+Doing this is the simplest way to start e.g. a long-running web server - just `nohup` it and send the process to the background.
 You can then safely close the terminal - the web server will keep running.
 However, for production setups web server usually utilize proper process supervisors like `systemd`.
 
