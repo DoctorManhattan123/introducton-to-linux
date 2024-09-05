@@ -30,7 +30,7 @@ deb http://de.archive.ubuntu.com/ubuntu/ jammy-updates main restricted
 deb http://de.archive.ubuntu.com/ubuntu/ jammy universe
 deb http://de.archive.ubuntu.com/ubuntu/ jammy-updates universe
 
-## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu team, and may not be under a free licence.
+## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu team, and may not be under a free license.
 ## Please satisfy yourself as to your rights to use the software.
 ## Also, please note that software in multiverse WILL NOT receive any review or updates from the Ubuntu security team.
 deb http://de.archive.ubuntu.com/ubuntu/ jammy multiverse
@@ -54,7 +54,7 @@ This is followed by the URL of the repository.
 
 This is followed by the codename for the Ubuntu release (which is `jammy`, i.e. Ubuntu version `22.04`).
 
-The last partsd indicate section of the repository, where:
+The last parts indicate the section of the repository, where:
 
 - `main` is officially supported software
 - `restricted` is supported software that is not available under a completely free license
@@ -70,13 +70,13 @@ deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.
 
 ### Updating
 
-You can run the following command to fetch of available packages from the locations specified in `/etc/apt/sources.list` and `/etc/apt/sources.list.d`:
+You can run the following command to fetch available packages from the locations specified in `/etc/apt/sources.list` and `/etc/apt/sources.list.d`:
 
 ```sh
 sudo apt update
 ```
 
-During the update, you will see that the command hits the repositories one by one and perform the update.
+During the update, you will see that the command hits the repositories one by one and performs the update.
 
 Note that this does not actually upgrade or change any packages - it merely retrieves the newest information about these packages.
 
@@ -133,7 +133,7 @@ sudo apt purge $PACKAGE_NAME
 
 ### Searching for Packages
 
-YOu can use `apt search $KEYWORD` to search for packages and `apt show $PACKAGE_NAME` to display package information.
+You can use `apt search $KEYWORD` to search for packages and `apt show $PACKAGE_NAME` to display package information.
 
 ### Managing PPAs
 

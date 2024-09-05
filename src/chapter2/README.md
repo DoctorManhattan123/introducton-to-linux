@@ -3,7 +3,7 @@
 ## Working with the Command Line
 
 The **command line** (also called **terminal**) is an interface where you can type and execute text-based commands.
-It is a powerful tool and works the same on almost every environment you will ever encounter.
+It is a powerful tool and works the same in almost every environment you will ever encounter.
 
 To open the terminal on Ubuntu, press `Ctrl` + `Alt` + `T`.
 
@@ -11,20 +11,20 @@ To open a terminal on Mac you can open the search bar (`command` + `space`)
 
 ### Commands, Options, and Arguments
 
-To execute some action on the terminal, you enter the command, followed by options and arguments and press `Enter`/`Return`:
+To execute some action on the terminal, you enter the command, followed by options and arguments, and press `Enter`/`Return`:
 
 ```sh
 command -options arguments
 ```
 
-- **Command** - the action you want to perform, it could be anything from moving files, navigating through directories or downloading
+- **Command** - the action you want to perform, it could be anything from moving files, navigating through directories, or downloading
   files from the internet
-- **Options** - Modifiers that alter the behaviour the command. Options are usually a single letter preceded by a dash (e.g. `-l`). They tweak
+- **Options** - Modifiers that alter the behaviour of the command. Options are usually a single letter preceded by a dash (e.g. `-l`). They tweak
   the command's output and/or behaviour.
 - **Arguments** - The target(s) of the command. This could be a file, a directory, a url, and multiple other things, depending
   on the command's purpose
 
-> Options can be short (a single dash with a letter, e.g. `-l`) or long (two dashes following by a word, e.g. `--long`). You can usually combine
+> Options can be short (a single dash with a letter, e.g. `-l`) or long (two dashes followed by a word, e.g. `--long`). You can usually combine
 > multiple short options, for example instead of `-l -a`, you can write `-la`.
 
 In the following example, first execute the `ls` command.
@@ -54,7 +54,9 @@ Here is how the output of `ls -l` might look like:
 drwxrwxr-x 2 someuser someuser 4096 Jun  5 12:39 somedir
 ```
 
-Other options could be `-t` which will sort the file by modification date or `-a` which will list also hidden files (file prefixed with a dot, e.g. `.config`).
+
+Other options could be `-t, which will sort files by modification date, and `-a`, which will list all files, including hidden ones (those prefixed with a dot, e.g. `.config`).
+
 
 ```sh
 ls -l -t -a
@@ -67,7 +69,7 @@ ls -lta
 ```
 
 You can also give the `ls` command a target.
-This target can be a directory, which will the list the contents of the directory you give as the target instead of the current directory you are in.
+This target can be a directory, which will list the contents of the directory you give as the target instead of the current directory you are in.
 Suppose, you have a directory called `Downloads` - then you can list its contents from any directory by running:
 
 ```sh
@@ -81,15 +83,15 @@ This will work even if you are not currently in `Downloads`.
 In computing, the hierarchical directory structure is a fundamental concept that organizes files and directories (also known as folders in some operating systems) in a tree-like pattern.
 
 At the very top of this hierarchy is the "root directory" (`/`).
-It is the first directory in the file system, serving as the base or starting point from which all other directories and files come from.
+It is the first directory in the file system, serving as the base or starting point from which all other directories and files come.
 In graphical representations, the root directory is often depicted at the top or at the center of the tree.
 
 A directory can hold further files and directories.
 
-Therefore the root directory contains files and subdirectories, which contain more files and subdirectories and so on.
+Therefore, the root directory contains files and subdirectories, which in turn contain more files and subdirectories, and so on.
 
-You are probably familiar with grahical file managers (if you ever used the native windows file explorer or `finder` on MacOS).
-However the command line has no pictures.
+You are probably familiar with graphical file managers (if you ever used the native Windows file explorer or `finder` on MacOS).
+However, the command line has no pictures.
 At any given time (in the command line), we are inside a single directory (called the **current working directory**).
 
 From there we can navigate to the directory above us (the **parent directory**).
@@ -118,7 +120,7 @@ There are two types of path names:
 
 #### Absolute Path Names
 
-An absolute pathname begins with the root directory and follows the tree branch by branch until the path to the desired directory is completed.
+An absolute path name begins with the root directory and follows the tree branch by branch until the path to the desired directory is completed.
 Consider the directory `/usr/bin` (where most of our systems programs are installed).
 
 This means that the root directory contains a directory called `usr` and this directory has a directory called `bin`.
@@ -133,13 +135,13 @@ $ ls
 
 #### Relative Path Names
 
-In contrary to absolute path names which always start at the root directory, relative path names start from the current working directory.
+In contrast to absolute path names, which always start from the root directory, relative path names begin from the current working directory.
 To show that the current pathname should be a relative path, you can use two kinds of special notations:
 
-- `.` - refers the the current working directory
+- `.` - refers to the current working directory
 - `..` - refers to the parent of the current working directory.
 
-For example lets change the current working directory to the parent of `bin`. Using an absolute path names, you would do this:
+For example, let's change the current working directory to the parent of `bin`. Using absolute path names, you would do this:
 
 ```console
 $ cd /usr/bin
@@ -150,7 +152,7 @@ $ pwd
 /usr
 ```
 
-Using relative pathnames, you would do this:
+Using relative path names, you would do this:
 
 ```console
 $ cd /usr/bin
@@ -159,7 +161,7 @@ $ pwd
 /usr
 ```
 
-If we would like to go back to the `bin` directory, we could do it like this:
+If we would like to go back to the `bin` directory, we could do this like this:
 
 ```console
 $ pwd
@@ -176,16 +178,16 @@ $ pwd
 
 A few important facts about file names:
 
-Filenames that begin with a period character are hidden, this means that when using the `ls` command, they will not be displayed.
+File names that begin with a period character are hidden, this means that when using the `ls` command, they will not be displayed.
 To list them you have to use the command with `-a` argument (`ls -a`).
 
 > Fun fact: This was originally a [bug](https://tookmund.com/2022/03/rob-pike-shortcuts) that became a feature at some point.
 
-Filenames and commands are case-sensitive, meaning that `File1` and `file1` are two different files.
+File names and commands are case-sensitive, meaning that `File1` and `file1` are two different files.
 
-Linux doesn't really care about file extensions (unlike e.g. Windows), the content and/or purpose of a file is determined through other means.
+Linux does not really care about file extensions (unlike e.g. Windows), the content and/or purpose of a file is determined through other means.
 
-Although Linux supports long filenames that may contain spaces, you should avoid spaces in filenames, and if you want to represent spaces between words inside a file, use underscores or dashes instead.
+Although Linux supports long file names that may contain spaces, you should avoid spaces in file names, and if you want to represent spaces between words inside a file, use underscores or dashes instead.
 
 ## Basic File Commands
 
@@ -195,7 +197,7 @@ We _highly recommend_ that you open the terminal and follow along by typing the 
 ### Navigating the Filesystem
 
 The `pwd` command shows your current directory's path.
-If you're not sure where you are in the filesystem, type `pwd` and press Enter.
+If you are not sure where you are in the filesystem, type `pwd` and press Enter.
 It will display the full path of your current directory.
 
 The `ls` command is used to view the contents of a directory (like folders and files).
@@ -203,7 +205,7 @@ To see more details about each file, use `ls -l`.
 This command lists files with details like permissions, owner, size, and modification date.
 To include hidden files (files that start with a dot) in your listing, use `ls -a`.
 
-> In Linux and Unix-like operating systems, hidden files are those that begin with a dot (.) in their filename.
+> In Linux and Unix-like operating systems, hidden files are those that begin with a dot (.) in their file name.
 > These files are usually not displayed by default when using file managers or the ls command, as they are often used for storing user preferences or system configuration settings.
 
 The `cd` command is used to move between directories.
@@ -231,10 +233,10 @@ To copy a directory and its contents, use the `-r` (recursive) flag: `cp -r $SOU
 The `rm` command is used to delete files.
 To delete a file, type `rm filename.txt` and press Enter.
 To delete a directory and its contents, use the -r flag: `rm -r directory/`.
-Be **extremely cautios** with this command, as it permanently deletes files and directories.
+Be **extremely cautious** with this command, as it permanently deletes files and directories.
 
 > In fact, it is often better to avoid `rm` altogether and use something like `trash-put` (from the `trash-cli` package) instead.
-> This will simply copy the target to a special "trash" directory, meaning that if you accidentally mistype something, you can still recover.
+> This will simply copy the target to a special "trash" directory, meaning that if you accidentally mistype something, you can still recover it.
 
 The `find` command is used to search for files and directories based on various criteria.
 To find a file by name, type `find $PATH -name $NAME`.
@@ -263,7 +265,7 @@ To find a file, type `locate $FILENAME`.
 It will display paths of all files and directories with `$FILENAME` in their names.
 The locate command relies on a database that is periodically updated by the system; to update this database manually, you can use the `updatedb` command.
 
-Not it is time to practice and do it yourself.
+Now, it is time to practice and do it yourself.
 
 Perform the following instructions by using the commands you just learned.
 You can check the correctness of the current step by just viewing the contents after doing a command.
@@ -298,7 +300,7 @@ This is where the true power of these commands, combined with globs and wildcard
 
 #### Understanding Globs and Wildcards
 
-Globs and wildcards are patterns that allow you to match filenames in a flexible way.
+Globs and wildcards are patterns that allow you to match file names in a flexible way.
 For example, the asterisk (\*) wildcard matches any number of characters.
 If you want to copy all PNG images from one directory to another, you could use:
 
@@ -317,22 +319,22 @@ This can be dangerous if you accidentally overwrite important files.
 The `-i` option prompts you before overwriting, giving you a chance to cancel the operation.
 
 Consider copying a file named `report.txt` to a directory that already has a file with the same name.
-Using cp alone would overwrite the existing file without warning.
+Using `cp` alone would overwrite the existing file without warning.
 
-With `cp -i`, you're prompted to confirm the overwrite, reducing the risk of accidental data loss.
+With `cp -i`, you are prompted to confirm the overwrite, reducing the risk of accidental data loss.
 
 ```sh
 cp -i source/report.txt destination/
 ```
 
-If `report.txt` exists in `destination/`, you'll see a prompt like:
+If `report.txt` exists in `destination/`, you will see a prompt like:
 
 ```sh
 overwrite destination/report.txt? (y/n)
 ```
 
 The same thing is also true for the `mv` command.
-If you use the `mv` command and the file exists, then it would be overwritten.
+If you use the `mv` command and the file exists, then it will be overwritten.
 With the `-i` flag, you will be asked if you want to overwrite it.
 
 #### The Dangers of `rm`
@@ -357,8 +359,8 @@ Put together, this can be extremely dangerous:
 - Running `rm -rf /` as root would attempt to delete _every_ file on the system, rendering it unusable.
 - Even more limited commands, like `rm -rf *` in an important directory, can lead to significant data loss.
 
-When you use `rm` especially with the `-r` and/or `-f` flag should be used _extremely carefully_.
-In contrast to other operating systems, on Linux you can literally delete anything (including your boot loader or files that are crucial for your OS to work properly).
+When you use `rm`, especially with the `-r` and/or `-f` flags should be used _extremely carefully_.
+In contrast to other operating systems, on Linux, you can literally delete anything (including your boot loader or files that are crucial for your OS to work properly).
 In general, you should be careful with wildcard usage and if you are new to Linux, use something like `trash-cli` to avoid deleting data forever.
 
 > In fact, `rm -rf` is kind of a "meme" in the Linux community (for example, some developers have suggested that you can play "Russian roulette" using a script that generates a random number and then either does nothing or run `rm -rf /`).
@@ -366,7 +368,7 @@ In general, you should be careful with wildcard usage and if you are new to Linu
 
 ### Utility Commands
 
-There are also a few utility commands you should now about.
+There are also a few utility commands you should know about.
 
 The command `echo <something>` just prints the thing after the `echo` to the console:
 
@@ -396,7 +398,7 @@ Hello, world!
 
 ## Symbolic Links
 
-Symbolic links (also called _symlinks_), are special types of files that act as pointers or references to another file or directory.
+Symbolic links (also called _symlinks_) are special types of files that act as pointers or references to another file or directory.
 Unlike a regular file, a symlink does not contain the actual data of the file; instead, it simply contains the path to its target file or directory.
 
 Symbolic links provide an easy way to create shortcuts or references to other files and directories without duplicating the actual content.
@@ -415,13 +417,13 @@ If the original file is moved or deleted, the soft link becomes a dangling link,
 
 Let's create a soft link.
 
-First lets create the initial file `original.txt`.
+First, let's create the initial file `original.txt`.
 
 ```sh
 touch original.txt
 ```
 
-Now lets create the symlink:
+Now, let's create the symlink:
 
 ```sh
 ln -s original.txt softlink.txt
@@ -433,7 +435,7 @@ If you now have a look at the file softlink.txt, you will see that the file is e
 $ cat softlink.txt
 ```
 
-Now lets add some data into the `original.txt`, for example "Hello, world! and display the content of `symlink.txt`:
+Now, let's add some data into the `original.txt`, for example, "Hello, world! and display the content of `symlink.txt`:
 
 ```console
 $ echo "Hello, world!" > original.txt
@@ -441,7 +443,7 @@ $ cat softlink.txt
 Hello, world!
 ```
 
-You can also edit the symlink file and see that content inside the `original.txt` is also changed.
+You can also edit the symlink file, and you will find that the content of `original.txt` is updated accordingly.
 
 ```console
 $ echo "Hello, softlink file!" > softlink.txt
@@ -449,14 +451,14 @@ $ cat original.txt
 Hello, softlink file!
 ```
 
-You can also see where the softlink is pointing to by using `readlink -f $FILENAME`.
+You can also see where the soft link is pointing to by using `readlink -f $FILENAME`.
 
 ```console
 $ readlink -f softlink.txt
 /home/user/original.txt
 ```
 
-As mentioned previously, if you delete the original file, then the softlink will become invalid.
+As mentioned previously, if you delete the original file, then the soft link will become invalid.
 
 ```sh
 rm original.txt
@@ -466,13 +468,13 @@ cat softlink.txt # cat: softlink.txt: No such file or directory
 
 ### Hard Links
 
-Hard links are direct references to the physical data of the file of the disk.
-Unlike soft liks, they do not contain the path to the original file but share the same inode.
+Hard links are direct references to the physical data of the file on the disk.
+Unlike soft links, they do not contain the path to the original file but share the same inode.
 
 Deleting or moving the original file does not affect the hard link as both the original file and the hard link reference the same data on the disk.
 Hard links cannot be created for directories.
 
-Now lets create a hardlink:
+Now, let's create a hard link:
 
 ```sh
 rm original.txt
@@ -482,8 +484,8 @@ ln original.txt hardlink.txt
 cat hardlink.txt # Hello, world!
 ```
 
-As you can see, the same data, that we put into the original.txt, is in the `hardlink.txt` file.
-But in contrary to softlinks, if we now delete the `original.txt`, the content will still be in `hardlink.txt`.
+As you can see, the same data, which we put into the original.txt, is in the `hardlink.txt` file.
+But in contrast to soft links, if we now delete the `original.txt`, the content will still be in `hardlink.txt`.
 
 ```sh
 rm original.txt
@@ -492,18 +494,18 @@ cat hardlink.txt # Hello, world!
 
 ### Link Example
 
-To better understand the use cases of links lets assume the following situation:
+To better understand the use cases of links, let's assume the following situation:
 
 Imagine a scenario where a program needs to use a shared resource, like a file named "foo," which often changes versions.
-It would be helpful to include the version number in the filename so anyone can easily see which version of "foo" is currently installed.
+It would be helpful to include the version number in the file name so anyone can easily see which version of "foo" is currently installed.
 
 However, this introduces a challenge.
 Every time a new version is installed and the file name changes, we would need to update every program that uses this resource to look for the new name.
 This process is cumbersome and far from fun.
 
 This is where symbolic links come to the rescue.
-Let's say we install version 2.6 of "foo," giving it the filename "foo-2.6 and then create a symbolic link called "foo" that points to "foo-2.6."
-Now, when a program opens "foo," it's actually accessing "foo-2.6."
+Let's say we install version 2.6 of "foo," giving it the filename "foo-2.6, and then create a symbolic link called "foo" that points to "foo-2.6."
+Now, when a program opens "foo," it is actually accessing "foo-2.6."
 This arrangement keeps everyone satisfied.
 Programs can still locate "foo," and the current version installed is transparent.
 
@@ -515,9 +517,9 @@ If "foo-2.7" turns out to have a bug, reverting to the previous version is as si
 ## Filesystem Hierarchy Standard
 
 The **FHS (_Filesystem Hierarchy Standard_)** consists of a set of requirements and guidelines for file and directory placement under UNIX-like operation systems.
-They are intended to support interoperability of applications and greater uniformity of these systems.
+They are intended to support the interoperability of applications and greater uniformity of these systems.
 
-Understanding and knowing the base structure of your system is essential for doing debugging and understanding the next chapters, as most of the concepts that will come later are represented via files.
+Understanding and knowing the base structure of your system is essential for debugging and understanding the next chapters, as most of the concepts that will come later are represented via files.
 In Linux _everything is a file_.
 
 ### Directory Structure
@@ -530,8 +532,8 @@ the most important directories and files, but we recommend to also skip through 
 #### The Root Filesystem
 
 - `/` - this is the _primary hierarchy_ root and the root directory for the whole FHS.
-- `/bin` - this directory holds essential user commands binaries that can be used by all users.
-  For example the binaries for most of the commands that you learned previously are located here
+- `/bin` - this directory holds essential user command binaries that can be used by all users.
+  For example, the binaries for most of the commands that you learned previously are located here
   (e.g. cat, cp, echo, and many more that you will also learn in the later chapters of this book).
 - `/boot` - this directory contains the static files for the boot loader. _I would really recommend
   you not deleting this directory_
@@ -539,13 +541,13 @@ the most important directories and files, but we recommend to also skip through 
 - `/etc` - contains host-specific system configuration files. Configuration files are local
   files that are used to control the operation of a program. They have to be static and cannot
   be an executable binary.
-- `/home` - contains the users home directory, this is where you will be spending most of your time
+- `/home` - contains the user home directory, this is where you will be spending most of your time
 - `/lib` - holds shares library images needed to boot the system and run the commands in the
   root file system, e.g. by binaries in `/bin` and `/sbin`
-- `/media` - contains subdirectories which are used as mount points for removable media devices
+- `/media` - contains subdirectories that are used as mount points for removable media devices
   such as floppy disks and cdroms
 - `/mnt` - is the mount point for a temporarily mounted file system. The content of this
-  directory is a local issue and should not affect the manner in which any program is run.
+  directory is a local issue and should not affect how any program is run.
   You should not use this directory for installation programs
 - `/opt` - is reserved for add-on application software packages
 - `/root` - home directory for the root user. This location is the recommended default location
@@ -554,21 +556,21 @@ the most important directories and files, but we recommend to also skip through 
   booted. Those files must be cleared at the beginning of the boot process
 - `/sbin` - contains utilities used for system administration, e.g. root-only commands. Commands
   here are essential for booting, restoring, recovering and/or repairing the system
-- `/tmp` - contains temporary files which are sometimes needed by files. Programs must not asumme
+- `/tmp` - contains temporary files which are sometimes needed by files. Programs must not assume
   that any files in this directory are preserved between the invocations of the program
 
 Now it is time to see for yourself. Navigate to the root directory and show yourself the contents
 of it (you should be able to already do this yourself).
 
-_I give you a moment to do this yourself and i will reveal it now_
+_I give you a moment to do this yourself and I will reveal it now_
 
 ```sh
 cd /
 ls -la
 ```
 
-Now try to find every directory we previously talked about and explore. Especially inside the
-`/bin` directory you can search for the binaries we introduced in the previous chapters.
+Now, try to find every directory we previously talked about and explore. Especially inside the
+`/bin` directory, you can search for the binaries we introduced in the previous chapters.
 
 #### The `/usr` Hierarchy
 
@@ -577,29 +579,29 @@ Large software packages must not use a direct subdirectory under the `/usr` hier
 
 - `/usr/bin` - This is the primary directory of executable commands on the system. There must not be
   any subdirectories in `/usr/bin`
-- `/usr/sbin` - contains any non-essential binaries used exlusively by the system administrator.
+- `/usr/sbin` - contains any non-essential binaries used exclusively by the system administrator.
 
-There are many more, but subdirectories in the `/usr` directory, but they are no essential to understand. If you
+There are many more subdirectories in the `/usr` directory, but they are not essential to understand. If you
 want to have more information, you can explore it [here](https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch04.html).
 
 #### The `/var` Hierarchy
 
-The `/var` directory contains variable data files. This includes spool files (files that contain data which is awaiting some
-kind of processing, e.g. files that will be printed by a printer later), administrative data, loggin data and temporary files.
+The `/var` directory contains variable data files. This includes spool files (files that contain data that is awaiting some
+kind of processing, e.g. files that will be printed by a printer later), administrative data, logging data and temporary files.
 
 We will not go through every subdirectory here as the exact subdirectories will be mostly not relevant in the later chapters.
 If you are interested, you can read about it [here](https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch05.html).
 
-This section might have seem dull, but knowing this, or at least understanding where specific files are located, helps you
+This section might have seemed dull, but knowing this, or at least understanding where specific files are located, helps you
 extremely when developing, understanding the concept of the things that come later and helps you debug problems, that you
 would otherwise never be able to debug.
 
 > That said, if you do not know what you are doing, you should NOT edit or remove directories or files located in these
 > directories. _It seems pretty obvious, that you should not remove the `/boot` or `/bin` or any other directories inside the `/` directory._
 
-Moreover you can also only edit those files when being the root user. Are you interested in what the root user is?
+Moreover, you can also only edit those files when being the root user. Are you interested in what the root user is?
 
 _Then stay tuned for the next season of `Introduction to Linux`._
 
 In the next chapter, we will discuss users and groups, which is how unix-like systems manage permissions for different users.
-So that not every user, can just delete you `/boot` directory and kill your whole system.
+So that not every user, can just delete your `/boot` directory and kill your whole system.

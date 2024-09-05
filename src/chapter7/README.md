@@ -5,7 +5,7 @@
 So far we only executed straightforward commands in the terminal.
 This is enough for simple cases, but not for more intricate scenarios.
 
-For example, we might want execute a sequence of commands after each other, chain commands together, repeat commands or maybe even execute commands conditionally.
+For example, we might want to execute a sequence of commands after each other, chain commands together, repeat commands or maybe even execute commands conditionally.
 
 We can achieve this by writing **shell scripts**.
 These are similar to scripts written in other programming languages (like Python or JavaScript).
@@ -29,17 +29,17 @@ This will output `Hello, world!` to the terminal.
 
 ## Choosing Your Flavour
 
-The are many different shells available for Linux - `sh`, `bash`, `ksh`, `csh` and `fish` are just a few examples.
+There are many different shells available for Linux - `sh`, `bash`, `ksh`, `csh` and `fish` are just a few examples.
 
 We will primarily focus on `sh` and `bash`.
-The `sh` shell is an older shell whose features later became standardized in the so called **POSIX standard**.
+The `sh` shell is an older shell whose features later became standardized in the so-called **POSIX standard**.
 The `bash` shell is a newer shell that implements all features of `sh` and has some additional functionality on top of that.
 
 We will primarily talk about the POSIX-compliant parts of bash.
-If some `bash` feature is not POSIX-compliant we will explicitly mention it.
+If some `bash` feature is not POSIX-compliant, we will explicitly mention it.
 
-Because there are many different shells, it is often good practice to add a **shebang** on top of your shell to specify how your script should be executed.
-For example if we want to execute our script with `sh` we would specify the location of `sh` as the shebang:
+Since there are many different shells, it is often a good practice to add a **shebang** on top of your shell to specify how your script should be executed.
+For example, if we want to execute our script with `sh` we would specify the location of `sh` as the shebang:
 
 ```sh
 #!/bin/sh
@@ -55,7 +55,7 @@ Alternatively, we could specify that our script should be executed with `bash` l
 echo "Hello, world!"
 ```
 
-Shebangs are a good idea, because often scripts are executed not via `sh` or `bash` but by marking them as executable and then simply specifying the path:
+Shebangs are a good idea because often scripts are executed not via `sh` or `bash` but by marking them as executable and then simply specifying the path:
 
 ```sh
 chmod u+x example.sh
@@ -191,7 +191,7 @@ echo $((5.2))
 Just like most other programming languages, `sh` supports functions.
 
 However, you should not think about shell functions the same way you would think about e.g. Python or JavaScript functions.
-Instead, you should think of shell functions as kind of "mini-scripts" (or "mini-commands").
+Instead, you should think of shell functions as a kind of "mini-scripts" (or "mini-commands").
 This is also why `sh` functions have a peculiar syntax for passing arguments or returning values.
 
 You can define a function like this:
@@ -202,7 +202,7 @@ function_name() {
 }
 ```
 
-You can the call the function by simply writing `function_name` (just like you would call a regular command).
+You can call the function by simply writing `function_name` (just like you would call a regular command).
 
 For example:
 
@@ -253,7 +253,7 @@ add() {
 add 5 10 15
 ```
 
-If you want return a value from a function, you can `echo` it and then capture the output via command substitution:
+If you want to return a value from a function, you can `echo` it and then capture the output via command substitution:
 
 ```sh
 greet() {
@@ -272,7 +272,7 @@ An important point with `bash` and most other `sh` dialects is that variables ar
 #!/bin/bash
 
 fun() {
-    # Create a variable in function body
+    # Create a variable in the function body
 	x=42
     # This will output 42
     echo "In body: $x"
@@ -291,7 +291,7 @@ If you want to create a local variable in `bash`, you need to explicitly use the
 #!/bin/bash
 
 fun() {
-    # Create a variable in function body
+    # Create a variable in the function body
 	local x=42
     echo "In body: $x"
 }
@@ -320,7 +320,7 @@ fi
 Make sure that there is a space after `[` and a space before `]`.
 
 The conditions must be expressions that evaluate to true or false.
-Here you can use comparison operators like `-eq`, `-ne`, `-lt`, `-le`, `-gt` and `-ge` for numeric comparisons.
+Here, you can use comparison operators like `-eq`, `-ne`, `-lt`, `-le`, `-gt` and `-ge` for numeric comparisons.
 For example:
 
 ```sh
@@ -366,7 +366,7 @@ fi
 
 Bash introduces additional syntax that looks more like conditionals in other programming languages.
 You can write `[[ ]]` instead of `[ ]` to allow for operators like `&&` (and), `||` (or) and `==` (similar to `=` with additional pattern matching features).
-For example, the previous example could be writen like this in Bash:
+For instance, the previous example could be written like this in Bash:
 
 ```sh
 #!/bin/bash
@@ -383,7 +383,7 @@ This syntax looks much more similar to other programming languages.
 
 ## Loops
 
-The shell supports most of the familiar loops like `while` and `for`.
+The shell supports most familiar loops like `while` and `for`.
 
 A `while` loop constantly checks whether a condition is met.
 If the condition isn't met, the while loop terminates.
@@ -406,8 +406,8 @@ while [ $count -le 5 ]; do
 done
 ```
 
-A shell-specific loop is the `until` loop which is kind of the opposite of the `while` loop.
-An `while` loop continues until a condition _is no longer true_.
+A shell-specific loop is the `until` loop which is a kind of the opposite of the `while` loop.
+A `while` loop continues until a condition _is no longer true_.
 The `until` loop continues until a condition _is true_.
 
 Here is how we could rewrite the example using an `until` loop:
@@ -467,7 +467,7 @@ while [ $count -le 5 ]; do
 done
 ```
 
-You can the `continue` keyword to skip the rest of the current loop iteration and continue with the next iteration:
+You can use the `continue` keyword to skip the rest of the current loop iteration and continue with the next iteration:
 
 ```sh
 #!/bin/bash
@@ -484,7 +484,7 @@ done
 
 ## Stdin, Stdout and Stderr
 
-In Linux, the standard way programs communicate with their environment is through the three data stream called **stdin** (short for standard input), **stdout** (short for standard output) and **stderr** (short for standard error).
+In Linux, the standard way programs communicate with their environment is through the three data streams called **stdin** (short for standard input), **stdout** (short for standard output) and **stderr** (short for standard error).
 
 Specifically, they send results to stdout and errors to stderr, while reading input from stdin.
 Internally, these streams are referenced by the file descriptor numbers `0` (stdin), `1` (stdout), `2` (stderr).
@@ -547,17 +547,17 @@ echo "This will be written to stderr" 1>&2
 
 We can also use `>` to redirect stderr to stdout via the `2>&1` notation.
 
-This is usually interesting for the cases where want to redirect both stdout and stderr to a file using `> filename 2>&1`.
+This is usually useful in cases where you want to redirect both stdout and stderr to a file using `> filename 2>&1`.
 Note that the order of the redirects is important here:
 
 First, we redirect `stdout` to `filename`.
 Second, we redirect `stderr` to `stdout`.
 Since `stdout` is redirected to `filename`, `stderr` will also be redirected to `filename`.
 
-> We can also use the `>` operator to create the worlds simplest text editor by running `cat > output`.
+> We can also use the `>` operator to create the world's simplest text editor by running `cat > output`.
 
 We can use the `<` operator to redirect stdin.
-Consider this script that read a line from a user and outputs it back:
+Consider this script that reads a line from a user and outputs it back:
 
 ```sh
 read -p "Enter a line:" line
@@ -581,7 +581,7 @@ The first script `generate.sh` generates numbers from 1 to 5 and writes them to 
 seq 1 5
 ```
 
-Now consider a second script `square.sh` that reads number from stdin and prints their squares:
+Now, consider a second script `square.sh` that reads numbers from stdin and prints their squares:
 
 ```sh
 while read number; do
@@ -640,13 +640,13 @@ export VAR_NAME=varvalue
 ```
 
 The variable will be set for the duration of the session (e.g. if you close the terminal, it will be lost).
-You scripts will be able to access the variable `VAR_NAME`.
+Your scripts will be able to access the variable `VAR_NAME`.
 
 You can use `printenv` to print the currently set environment variables.
 
 ## Should you use `bash`?
 
-Since `bash` is theoretically not POSIX-compliant, there a some people that advocate against using bash (at least the non-compliant features).
+Since `bash` is theoretically not POSIX-compliant, there a some people who advocate against using bash (at least the non-compliant features).
 
 However, these days `bash` is available on practically any useful Linux distribution.
 In our opinion, you should absolutely use `bash` (including the non-compliant features) unless you really have to support some ancient Linux distribution.

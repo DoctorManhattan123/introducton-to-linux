@@ -10,9 +10,9 @@ Users are the entities (people or processes) that interact with the system, whil
 A **user** is an account representing someone or something that interacts with the system (most of the time it will be you).
 Each user has a unique identifier called the **user id** (**uid** for short).
 
-Every user has its own home directory.
+Every user has their own home directory.
 
-First let's see which user you are.
+First, let's see which user you are.
 With the `whoami` command, you can see the current user:
 
 ```console
@@ -25,14 +25,14 @@ In this case, the current user is `someuser`.
 Different users have different privileges.
 The most "privileged" user is usually `root` - this is similar to the concept of an "admin" user.
 
-If the you try to execute a command that needs root privileges and you do not run it with `sudo` or as a user with root privilege, then you will often get a `Permission denied` error.
+If you try to execute a command that needs root privileges and you do not run it with `sudo` or as a user with root privilege, then you will often get a `Permission denied` error.
 
 ### User Management
 
 You can add a new user using the `useradd` command.
 The `-m` flag will specify the home directory of the new user.
 
-Note that `useradd` is a privileged command, i.e. this won't work:
+Note that `useradd` is a privileged command, i.e. this will not work:
 
 ```console
 $ useradd -m exampleuser
@@ -58,20 +58,20 @@ You can also change the name of the user:
 sudo usermod -l renameduser exampleuser
 ```
 
-You will also see that the new user has its own home directory:
+You will also see that the new user has their own home directory:
 
 ```console
 $ ls /home/
 alex/  exampleuser/
 ```
 
-To login as the new user, you can use the `su` command:
+To log in as the new user, you can use the `su` command:
 
 ```sh
 su - renameduser
 ```
 
-To logout, you can just use the `exit` command.
+To log out, you can just use the `exit` command.
 
 You can also delete a user (the `-r` option specifies that the home directory and mail spool of the user should also be deleted):
 
@@ -106,7 +106,7 @@ $ groups someuser
 someuser sudo cdrom sambashare docker
 ```
 
-The exact groups will of course depend on your machine.
+The exact groups will, of course, vary depending on your machine.
 
 You can also list all groups currently present in the system:
 
@@ -121,7 +121,7 @@ sudo groupadd examplegroup
 sudo gpasswd -a alex examplegroup
 ```
 
-> For these changes to take effect, you need to logout and login again
+> For these changes to take effect, you need to log out and log in again
 
 You can also rename groups:
 
@@ -129,20 +129,20 @@ You can also rename groups:
 $ sudo groupmod -n renamedgroup examplegroup # groupmod -n <new-group-name> <old-group-name>
 ```
 
-You can also delete existing groups and remove user from a group:
+You can also delete existing groups and remove users from a group:
 
 ```sh
 $ sudo gpasswd -d alex renamedgroup # gpasswd -d <user> <group-name> # remove users from a group
 $ sudo groupdel renamedgroup # groupdel <group-name-to-delete> # delete existing groups
 ```
 
-There are a lot of specific groups, we covered a few of them above, but you can find a more complete list [here](https://wiki.archlinux.org/title/users_and_groups#Group_list)
+There are a lot of specific groups; we covered a few of them above, but you can find a more complete list [here](https://wiki.archlinux.org/title/users_and_groups#Group_list)
 
 ### Password Management
 
 The command which you will use for most of the things related to passwords is the `passwd` command.
 
-To change a users password you can type:
+To change a user's password you can type:
 
 ```sh
 sudo passwd $USERNAME
@@ -161,18 +161,18 @@ You can also force the user to change the password at the next login:
 sudo passwd -e $USERNAME
 ```
 
-Now lets do the following:
+Now, let's do the following:
 
 1. Create a new user
 2. Change the password of the user to a password of your liking
-3. Login as this user
-4. Logout
+3. Log in as this user
+4. Log out
 5. Disable password login to this user
-6. Try log in as the user
+6. Try to log in as the user
 7. Unlock the account
-8. Login into the account
-9. Logout
-10. remove the user and the group
+8. Log in to the account
+9. Log out
+10. Remove the user and the group
 
 Here is the solution:
 
@@ -193,8 +193,8 @@ $ sudo userdel -r exampleuser # delete the user
 
 _Everything is a file_.
 
-Most things in Linux will be managed through files: documents, directories, hard-drives, CD-ROMs, modems, keyboards, monitors, and more.
-Therefore you can manange most of the permissons on a system via managing permissions on files:
+Most things in Linux will be managed through files: documents, directories, hard drives, CD-ROMs, modems, keyboards, monitors, and more.
+Therefore, you can manage most of the permissions on a system via managing permissions on files:
 
 Every file on a Linux filesystem is owned by a user and a group, there are three types of access permissions:
 
@@ -221,9 +221,9 @@ drwxr-xr-x  6 root root      512 Apr  3  2023  grub/
 -rwxr-xr-x  1 root root 12886816 Jan  4 15:59  vmlinuz-linux
 ```
 
-The first column displays the file's permissions (for example the file `initramfs-linux.img` has the permissions `-rwxr-xr-x`).
-The third and fourth column displays the file's owning user and group, respectively.
-In this example all files are owned by the user `root` and the group `root`.
+The first column displays the file's permissions (for example, the file `initramfs-linux.img` has the permissions `-rwxr-xr-x`).
+The third and fourth columns display the file's owning user and group, respectively.
+In this example, all files are owned by the user `root` and the group `root`.
 
 The first column is split into four parts, the first letter, and three pairs of three letters:
 
@@ -236,12 +236,12 @@ Consider the following file example:
 
 `-rwxr-xr-x 1 root root 1113504 Jun  6  2019 /bin/bash`
 
-- First letter indicates that this is a file and not a directory
-- First part indicates that the root user has read, write and execute permissions
-- Second part indicates that the root group has read and execute (no write) permissions
-- Third part indicates that all other users have read and execute (no write) permissions
+- The first sign indicates that this is a file and not a directory
+- The first part indicates that the root user has read, write and execute permissions
+- The second part indicates that the root group has read and execute (no write) permissions
+- The third part indicates that all other users have read and execute (no write) permissions
 
-In reality this are just bits being set or unset, for example:
+In reality, these are just bits being set or unset, for example:
 
 ```
 rwx rwx rwx = 111 111 111 = 7 7 7
@@ -249,8 +249,8 @@ rw- rw- rw- = 110 110 110 = 6 6 6
 rwx --- --- = 111 000 000 = 7 0 0
 ```
 
-Keep this is mind, as when you set permissions, you can give a number to indicate the new permissions.
-Lets create a file:
+Keep this in mind, as when you set permissions, you can give a number to indicate the new permissions.
+Let's create a file:
 
 ```sh
 $ cd
@@ -259,7 +259,7 @@ $ ls -la permissions.txt
 -rw-r--r-- 1 alex alex 0 Jan 30 08:48 permissions.txt
 ```
 
-Lets change the permissions, so every user has `rw` permissions, but no `x` (execute) permissions.
+Let's change the permissions, so every user has `rw` permissions, but no `x` (execute) permissions.
 The corresponding number would be:
 
 ```
@@ -274,7 +274,7 @@ $ ls -la permissions.txt
 -rw-rw-rw- 1 alex alex 0 Jan 30 08:48 permissions.txt
 ```
 
-Now every user can read and write to this file.
+Now, every user can read and write to this file.
 
 Here is how we can remove all permissions for other users:
 
@@ -288,7 +288,7 @@ The same principle applies to directories, although the `rwx` means slightly dif
 You use this definition if the first bit is `d` (so it is a directory) instead of `-`.
 
 - r - allows the contents of the directory to be listed (e.g. via `ls`) if the x attribute is also set
-- w - allow files within the directory to be created, deleted, or renamed if the x attribute is also set
+- w - allows files within the directory to be created, deleted, or renamed if the x attribute is also set
 - x - allows a directory to be entered (e.g. cd dir)
 
 Let's create a folder and put a file in there and list the permissions of the folder:
@@ -310,7 +310,7 @@ Let's move to the parent directory:
 cd ..
 ```
 
-Now let's remove the `x` permissions from `permissions-folder` and observe that moving to `permissions-folder` is no longer possible:
+Now, let's remove the `x` permissions from `permissions-folder` and observe that moving to `permissions-folder` is no longer possible:
 
 ```sh
 $ chmod 666 permissions-folder
@@ -318,7 +318,7 @@ $ cd permissions-folder
 cd: Permissions denied: 'permissions-folder/'
 ```
 
-If you try to list the content of the directory, you will see this following:
+If you try to list the content of the directory, you will see the following:
 
 ```sh
 $ ls -la permissions-folder
