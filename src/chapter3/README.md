@@ -111,7 +111,7 @@ The exact groups will, of course, vary depending on your machine.
 You can also list all groups currently present in the system:
 
 ```sh
-cat /etc/group/
+cat /etc/group
 ```
 
 Let's create a new group and add the user to the group
